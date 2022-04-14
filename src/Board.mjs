@@ -55,7 +55,12 @@ export class Board {
   }
 
   tick(block) {
-    this.blockPositionRow +=1;
+    if (this.blockPositionRow < this.height-1) {
+      this.blockPositionRow +=1;
+    }
+    else {
+      this.fallingBlock = false;
+    }
   };
 
   
