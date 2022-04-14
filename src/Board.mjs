@@ -14,7 +14,6 @@ export class Board {
 
   toString() {
     
-    const TEXTURE = ".";
     const NEW_LINE = "\n";
 
     let boardPrint =""
@@ -25,17 +24,22 @@ export class Board {
             boardPrint = boardPrint+this.block.icon;
           }
           else {
-            boardPrint = boardPrint+TEXTURE;
+            boardPrint = this.addTextureToBoardPrint(boardPrint);
           }
         }
         else {
-          boardPrint = boardPrint+TEXTURE;
+          boardPrint = this.addTextureToBoardPrint(boardPrint);
         }        
     }
     boardPrint = boardPrint+NEW_LINE;
   }
   return boardPrint;
 }
+  addTextureToBoardPrint(boardPrint) {
+    const TEXTURE = ".";
+    boardPrint = boardPrint+TEXTURE;
+    return boardPrint;
+  }
 
   drop(block) {
     this.block = block;
