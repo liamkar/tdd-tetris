@@ -42,4 +42,8 @@ export class Board {
     this.blockPositionRow = 0;
     this.blockPositionColumn = 1;
   };
+
+  tick(block) {
+    this.blockPositionRow +=1;
+  }
 }
