@@ -6,6 +6,7 @@ export class Board {
   blockPositionRow;
   blockPositionColumn;
  
+  fallingBlock=true;
 
   constructor(width, height) {
     this.width = width;
@@ -46,9 +47,17 @@ export class Board {
     this.block = block;
     this.blockPositionRow = 0;
     this.blockPositionColumn = 1;
+    this.fallingBlock = true;
   };
+
+  hasFalling() {
+    return this.fallingBlock;
+  }
 
   tick(block) {
     this.blockPositionRow +=1;
-  }
+  };
+
+  
+
 }
