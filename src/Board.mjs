@@ -25,14 +25,12 @@ export class Board {
     for (let i=0; i<this.height; i++) {
       for (let j=0; j<this.width; j++) {
         if (allBlocks.length > 0) {
-          for (let b=0; b<allBlocks.length; b++) {
-            let block = allBlocks[b];
-            if (block.positionRow === i && block.positionColumn === j) {
-              boardPrint = boardPrint+block.icon;
-            }
-            else {
+          let blockAtCurrentPosition = this.findBlock(allBlocks, i, j);
+          if (blockAtCurrentPosition >= 0) {
+              boardPrint = boardPrint+allBlocks[blockAtCurrentPosition].icon;
+          }
+          else {
               boardPrint = this.addTextureToBoardPrint(boardPrint);
-            }
           }
         }
         else {
@@ -70,5 +68,15 @@ export class Board {
       this.fallingBlock = "";
     }
   };
+
+  findBlock(allBlocks, i, j) {
+    for (let b=0; b<allBlocks.length; b++) {
+      let block = allBlocks[b];
+      if (block.positionRow === i && block.positionColumn === j) {        
+        return b;
+      }
+    }
+    return -1
+  }
 
 }
