@@ -16,7 +16,7 @@ describe("Falling blocks", () => {
     );
   });
 
-  /*
+  
   describe("When a block is dropped", () => {
     beforeEach(() => {
       board.drop(new Block("X"));
@@ -47,7 +47,6 @@ describe("Falling blocks", () => {
       expect(after).to.equal(before);
     });
   });
-  */
 
   /*
   describe("When a block reaches the bottom", () => {
