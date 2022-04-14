@@ -3,10 +3,8 @@ export class Board {
   height;
  
   block;
-  blockPositionRow;
-  blockPositionColumn;
  
-  fallingBlock=true;
+  fallingBlock;
 
   constructor(width, height) {
     this.width = width;
@@ -21,7 +19,7 @@ export class Board {
     for (let i=0; i<this.height; i++) {
       for (let j=0; j<this.width; j++) {
         if (this.block) {
-          if (this.blockPositionRow === i && this.blockPositionColumn === j) {
+          if (this.block.positionRow === i && this.block.positionColumn === j) {
             boardPrint = boardPrint+this.block.icon;
           }
           else {
@@ -43,10 +41,10 @@ export class Board {
   }
 
   drop(block) {
-    if (this.block) throw("already falling");
+    if (this.fallingBlock) throw("already falling");
     this.block = block;
-    this.blockPositionRow = 0;
-    this.blockPositionColumn = 1;
+    block.positionRow = 0;
+    block.positionColumn = 1;
     this.fallingBlock = true;
   };
 
@@ -55,14 +53,12 @@ export class Board {
   }
 
   tick(block) {
-    if (this.blockPositionRow < this.height-1) {
-      this.blockPositionRow +=1;
+    if (this.block.positionRow < this.height-1) {
+      this.block.positionRow += 1;
     }
     else {
       this.fallingBlock = false;
     }
   };
-
-  
 
 }
