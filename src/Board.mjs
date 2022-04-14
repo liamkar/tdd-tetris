@@ -42,6 +42,7 @@ export class Board {
   }
 
   drop(block) {
+    if (this.block) throw("already falling");
     this.block = block;
     this.blockPositionRow = 0;
     this.blockPositionColumn = 1;
