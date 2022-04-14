@@ -60,14 +60,38 @@ export class Board {
   }
 
   tick() {
-    if (this.fallingBlock.positionRow < this.height-1) {
+    if (this.isThereSpaceBelowBlock()) {
       this.fallingBlock.positionRow += 1;
+  
+    //else if (!this.hasBlockReachedTheBottom()) {      
     }
     else {
       this.blocks.push(this.fallingBlock);
       this.fallingBlock = "";
     }
   };
+
+  isThereSpaceBelowBlock() {
+    if (!(this.findAnotherBlockJustBelow() >= 0) && 
+      !this.hasReachedBottomBoardEdge()) {
+    return true;
+  }
+    return false;
+  }
+
+  hasReachedBottomBoardEdge() {
+    if (this.fallingBlock.positionRow < this.height-1) {
+      return false;
+    }
+    return true;
+  }
+
+  findAnotherBlockJustBelow() {
+    const ONE_BELOW = 1
+    if (this.blocks.length > 0) {
+      return this.findBlock(this.blocks, this.fallingBlock.positionRow+ONE_BELOW, this.fallingBlock.positionColumn) 
+    }
+  }
 
   findBlock(allBlocks, i, j) {
     for (let b=0; b<allBlocks.length; b++) {
