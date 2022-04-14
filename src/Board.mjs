@@ -2,7 +2,7 @@ export class Board {
   width;
   height;
  
-  block;
+  blocks =[];
  
   fallingBlock;
 
@@ -16,14 +16,23 @@ export class Board {
     const NEW_LINE = "\n";
 
     let boardPrint =""
+
+    let allBlocks = this.blocks;
+    if (this.fallingBlock) {
+      allBlocks = this.blocks.concat([this.fallingBlock])
+    }
+
     for (let i=0; i<this.height; i++) {
       for (let j=0; j<this.width; j++) {
-        if (this.block) {
-          if (this.block.positionRow === i && this.block.positionColumn === j) {
-            boardPrint = boardPrint+this.block.icon;
-          }
-          else {
-            boardPrint = this.addTextureToBoardPrint(boardPrint);
+        if (allBlocks.length > 0) {
+          for (let b=0; b<allBlocks.length; b++) {
+            let block = allBlocks[b];
+            if (block.positionRow === i && block.positionColumn === j) {
+              boardPrint = boardPrint+block.icon;
+            }
+            else {
+              boardPrint = this.addTextureToBoardPrint(boardPrint);
+            }
           }
         }
         else {
@@ -34,6 +43,7 @@ export class Board {
   }
   return boardPrint;
 }
+
   addTextureToBoardPrint(boardPrint) {
     const TEXTURE = ".";
     boardPrint = boardPrint+TEXTURE;
@@ -42,22 +52,22 @@ export class Board {
 
   drop(block) {
     if (this.fallingBlock) throw("already falling");
-    this.block = block;
     block.positionRow = 0;
     block.positionColumn = 1;
-    this.fallingBlock = true;
+    this.fallingBlock = block;
   };
 
   hasFalling() {
-    return this.fallingBlock;
+    return this.fallingBlock ? true: false;
   }
 
-  tick(block) {
-    if (this.block.positionRow < this.height-1) {
-      this.block.positionRow += 1;
+  tick() {
+    if (this.fallingBlock.positionRow < this.height-1) {
+      this.fallingBlock.positionRow += 1;
     }
     else {
-      this.fallingBlock = false;
+      this.blocks.push(this.fallingBlock);
+      this.fallingBlock = "";
     }
   };
 
