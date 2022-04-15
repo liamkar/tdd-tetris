@@ -50,8 +50,6 @@ export class RotatingShape {
         if (w <width-1) {
           shapePrint += "\n";
         }
-        
-    
       }
       return shapePrint;
     }
@@ -61,12 +59,28 @@ export class RotatingShape {
       let m = this.matrix;
       let width = this.width;
       let height = this.height;
-
+      /*
       return new RotatingShape(
         ""+m[0][width-1]  +m[1][width-1]        +m[2][width-1]+"\n"
-          +m[0][width-2]  +m[height-2][width-2] +m[2][width-2]+"\n"            
+          +m[0][width-2]  +m[1][width-2]        +m[2][width-2]+"\n"            
           +m[0][width-3]  +m[1][width-3]        +m[2][width-3]
-      )    
-}
+      ) 
+      */   
+      return new RotatingShape(this.rotateSquareLeft(width, height, m));
+  }
+
+  rotateSquareLeft(width, height, m) {
+    let shapePrint ="";
+    for (let w = width-1; w>=0; w--) {
+      for (let h = 0; h<height; h++) {
+        shapePrint += m[h][w];
+      }
+      //TODO: how to get rid of this ridiculous \n plumbing?       
+      if (w > 0) {
+        shapePrint += "\n";
+      }
+    }
+    return shapePrint;
+  }
 
   }
