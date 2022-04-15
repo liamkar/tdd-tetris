@@ -24,10 +24,13 @@ export class RotatingShape {
       let width = this.width;
       let height = this.height;
 
+      //matrix[0].map((val, index) => matrix.map(row => row[index]).reverse())
+      //matrix.map((val, index) => matrix.map(row => row[index]).reverse())
+
           return new RotatingShape(
-            ""+m[height-1][0]   +m[height-2][width-3] +m[height-3][0]+"\n"
-              +m[height-1][1]   +m[height-2][width-2] +m[height-3][1]+"\n"            
-              +m[height-1][2]   +m[height-2][width-1] +m[height-3][2]
+            ""+m[height-1][0]   +m[height-2][0] +m[height-3][0]+"\n"
+              +m[height-1][1]   +m[height-2][1] +m[height-3][1]+"\n"            
+              +m[height-1][2]   +m[height-2][2] +m[height-3][2]
           )    
     }
 
