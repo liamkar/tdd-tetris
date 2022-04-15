@@ -18,7 +18,15 @@ export class RotatingShape {
 
     toString() {
         return this.shape.replaceAll(" ", "")+"\n";
-        //return this.shape.replaceAll(" ", "");
+
+        //trying to get rid of ridiculous \n additions all over the place, but feeling the tests are forcing me to 
+        //to use that nonsense...but most probably problem is in my terrible code
+        /*
+        let initialPrint = ""
+        let print = this.matrix.reduce((prev, current) => (prev + current.join("")+"\n"), initialPrint);
+        console.log(print);
+        return print;
+        */
     }
 
     rotateRight() {
@@ -38,9 +46,12 @@ export class RotatingShape {
         for (let h = height-1; h>=0; h--) {
           shapePrint += m[h][w];
         }
+        //TODO: how to get rid of this ridiculous \n plumbing?       
         if (w <width-1) {
           shapePrint += "\n";
         }
+        
+    
       }
       return shapePrint;
     }
