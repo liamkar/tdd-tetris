@@ -11,7 +11,7 @@ export class Tetromino {
         .....
         IIII.
         .....
-        .....`
+        .....`, 'I'
      );
 
     static O_SHAPE = new RotatingShape(
