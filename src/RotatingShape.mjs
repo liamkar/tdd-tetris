@@ -13,26 +13,38 @@ export class RotatingShape {
       this.height = rowSplits.length;
       this.matrix = rowSplits.map(i => i.split(""))
       this.width = this.matrix[0].length;
+      //this.shape= shape+"\n";
     }
 
     toString() {
         return this.shape.replaceAll(" ", "")+"\n";
+        //return this.shape.replaceAll(" ", "");
     }
 
     rotateRight() {
-      let m = this.matrix;
-      let width = this.width;
-      let height = this.height;
-
-      //matrix[0].map((val, index) => matrix.map(row => row[index]).reverse())
-      //matrix.map((val, index) => matrix.map(row => row[index]).reverse())
-
+      /*
           return new RotatingShape(
             ""+m[height-1][0]   +m[height-2][0] +m[height-3][0]+"\n"
               +m[height-1][1]   +m[height-2][1] +m[height-3][1]+"\n"            
               +m[height-1][2]   +m[height-2][2] +m[height-3][2]
           )    
+      */
+          return new RotatingShape(this.rotateSquareRight(this.width, this.height, this.matrix));
     }
+
+    rotateSquareRight(width, height, m) {
+      let shapePrint ="";
+      for (let w = 0; w<width; w++) {
+        for (let h = height-1; h>=0; h--) {
+          shapePrint += m[h][w];
+        }
+        if (w <width-1) {
+          shapePrint += "\n";
+        }
+      }
+      return shapePrint;
+    }
+
 
     rotateLeft() {
       let m = this.matrix;
