@@ -26,4 +26,16 @@ export class RotatingShape {
             +this.matrix[this.height-1][2]+this.matrix[this.height-2][this.width-1]+this.matrix[this.height-3][2]
           )    
     }
+
+    rotateLeft() {
+      let m = this.matrix;
+      let width = this.width;
+      let height = this.height;
+      return new RotatingShape(
+        ""+m[0][width-1]+m[1][width-1]+this.matrix[2][width-1]+"\n"
+        +m[0][width-2]+m[height-2][width-2]+m[height-1][width-2]+"\n"            
+        +m[0][0]+m[1][0]+m[2][0]
+      )    
+}
+
   }
