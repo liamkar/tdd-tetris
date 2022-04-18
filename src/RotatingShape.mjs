@@ -40,35 +40,6 @@ export class RotatingShape {
     }
 
     rotateRight() {
-
-      console.log('current orientation', this.currentOrientation);
-      
-      //    return new RotatingShape(
-      //      ""+m[height-1][0]   +m[height-2][0] +m[height-3][0]+"\n"
-      //        +m[height-1][1]   +m[height-2][1] +m[height-3][1]+"\n"            
-      //        +m[height-1][2]   +m[height-2][2] +m[height-3][2]
-      //    )    
-      
-      /*
-      let originalRotation = this.shape;
-      let rotation = this.shape; 
-      let nextOrientation = 0;
-      if (this.rotationIsValid()) {
-        if (this.orientationCount === 2) {
-          rotation = this.currentOrientation ? this.orientations[0] : this.orientations[1]; 
-          if (!rotation) {
-            rotation = this.rotateSquareRight(this.width, this.height, this.matrix);
-          }
-          nextOrientation = this.currentOrientation ? 0 : 1; 
-        }
-        
-        else {
-          rotation = this.rotateSquareRight(this.width, this.height, this.matrix)
-        }
-      }
-      return new RotatingShape(rotation, this.id, this.orientationCount, nextOrientation, originalRotation);
-      */
-
       return this.rotateCommon(true);
     }
 
@@ -145,43 +116,6 @@ export class RotatingShape {
     }
 
     rotateLeft() {
-      /*
-      let m = this.matrix;
-      let width = this.width;
-      let height = this.height;
-      
-      //return new RotatingShape(
-      //  ""+m[0][width-1]  +m[1][width-1]        +m[2][width-1]+"\n"
-      //    +m[0][width-2]  +m[1][width-2]        +m[2][width-2]+"\n"            
-      //    +m[0][width-3]  +m[1][width-3]        +m[2][width-3]
-      //) 
-      //
-
-      let originalRotation = this.shape;
-      let rotation = this.shape;
-      let nextOrientation = 0;
-
-      if (this.rotationIsValid()) {
-         
-      if (this.orientationCount === 2) {
-        rotation = this.currentOrientation ? this.orientations[0] : this.orientations[1];
-        if (!rotation) {
-          //yes, major bubblegum, but if rotating this left here, we would end up having a new distinct kind of 
-          //presentation, i mean, damn, not feeling motivation to even describe why this is needed,
-          rotation = this.rotateSquareRight(width, height, m);
-        }
-        nextOrientation = this.currentOrientation ? 0 : 1; 
-      }
-      else {
-        rotation = this.rotateSquareLeft(width, height, m);
-      }
-
-    }
-    else {
-      rotation = this.shape;
-    }
-      return new RotatingShape(rotation, this.id, this.orientationCount, nextOrientation, originalRotation);
-    */
       return this.rotateCommon(false);
   }
 
