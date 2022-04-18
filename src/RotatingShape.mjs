@@ -18,18 +18,12 @@ export class RotatingShape {
       this.height = rowSplits.length;
       this.matrix = rowSplits.map(i => i.split(""))
       this.width = this.matrix[0].length;
-      //this.shape= shape+"\n";
-      //console.log('setting ID to be ', id)
       this.id = id;
       this.currentOrientation = currentOrientation;
       this.orientationCount = orientationCount;
-      //this.orientations[0] = shape;
       this.orientations[currentOrientation] = shape;
 
       this.orientations[(currentOrientation ? 0 :1)] = oldShape;
-      //this.orientations[1] = this.rotateRight();
-      //this.orientations[1] = this.rotateSquareRight(this.width, this.height, this.matrix);
-      //this.orientations[1] = shape;
     }
 
     toString() {
@@ -60,35 +54,24 @@ export class RotatingShape {
       let rotation = this.shape; 
       let nextOrientation = 0;
       if (this.rotationIsValid()) {
-        //return new RotatingShape(this.rotateSquareRight(this.width, this.height, this.matrix), this.id, this.orientationCount, this.currentOrientation);
-        //return new RotatingShape(this.rotateSquareRight(this.width, this.height, this.matrix), this.id);
         if (this.orientationCount === 2) {
           rotation = this.currentOrientation ? this.orientations[0] : this.orientations[1]; 
           if (!rotation) {
             rotation = this.rotateSquareRight(this.width, this.height, this.matrix);
           }
-          //console.log('rotation at orientation count 2:',rotation)
           nextOrientation = this.currentOrientation ? 0 : 1; 
-          console.log('nextOrientation:', nextOrientation)
         }
         
         else {
-        //if (!rotation) {
-          console.log('orientation count different than 2')
           rotation = this.rotateSquareRight(this.width, this.height, this.matrix)
         }
       }
-      //return new RotatingShape(this.shape, this.id, this.orientationCount, this.currentOrientation);
-      //return new RotatingShape(nextShape, this.id, this.orientationCount, this.currentOrientation);
       return new RotatingShape(rotation, this.id, this.orientationCount, nextOrientation, originalRotation);
-      //return new RotatingShape(this.shape, this.id);
     }
 
     rotationIsValid() {
-
       //by 'O' we mean all squares - no matter how you rotate a square the shape will always be same - no effect.
       if (this.id === 'O')  {
-        //return this.shape;
         return false;
       }
       return true;
@@ -122,26 +105,13 @@ export class RotatingShape {
           +m[0][width-3]  +m[1][width-3]        +m[2][width-3]
       ) 
       */  
-      console.log('current orientation', this.currentOrientation);
-      //let nextShape = this.shape; 
-      //let rotation = "";
       let originalRotation = this.shape;
       let rotation = this.shape;
       let nextOrientation = 0;
 
-      //ok, now I'm starting to lose it completely - i really dont understand what is the problem with
-      //rotating this to left - but lets add this bubblegum fix here now just to pass the test
       if (this.rotationIsValid()) {
-      
-   
-        /*
-        if (this.id === 'I')  {
-        console.log('I SYMBOL ROTATION')
-        rotation = this.rotateSquareRight(width, height, m)
-      }
-      */
+         
       if (this.orientationCount === 2) {
-        //console.log('rotation at orientation count 2 left:',rotation)
         rotation = this.currentOrientation ? this.orientations[0] : this.orientations[1];
         if (!rotation) {
           //yes, major bubblegum, but if rotating this left here, we would end up having a new distinct kind of 
@@ -149,11 +119,8 @@ export class RotatingShape {
           rotation = this.rotateSquareRight(width, height, m);
         }
         nextOrientation = this.currentOrientation ? 0 : 1; 
-        console.log('nextOrientation:', nextOrientation)
       }
       else {
-      //if (!rotation) {
-        console.log('orientation count different than 2');
         rotation = this.rotateSquareLeft(width, height, m);
       }
 
@@ -163,15 +130,6 @@ export class RotatingShape {
     }
       return new RotatingShape(rotation, this.id, this.orientationCount, nextOrientation, originalRotation);
   }
-
-/*
-  chooseFromTwoOrientedShapes() {
-    if (this.orientationCount === 2) {
-      nextShape = this.currentOrientation ? this.orientations[0] : this.orientations[1]; 
-      nextOrientation = this.currentOrientation ? 0 : 1; 
-    }
-  }
-  */
 
   rotateSquareLeft(width, height, m) {
     let shapePrint ="";
