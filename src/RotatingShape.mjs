@@ -40,11 +40,27 @@ export class RotatingShape {
               +m[height-1][2]   +m[height-2][2] +m[height-3][2]
           )    
       */
-          return new RotatingShape(this.rotateSquareRight(this.width, this.height, this.matrix));
+
+      if (this.rotationIsValid()) {
+        return new RotatingShape(this.rotateSquareRight(this.width, this.height, this.matrix), this.id);
+      }
+      return new RotatingShape(this.shape, this.id);
+    }
+
+    rotationIsValid() {
+
+      //by 'O' we mean all squares - no matter how you rotate a square the shape will always be same - no effect.
+      if (this.id === 'O')  {
+        //return this.shape;
+        return false;
+      }
+      return true;
     }
 
     rotateSquareRight(width, height, m) {
       let shapePrint ="";
+
+
       for (let w = 0; w<width; w++) {
         for (let h = height-1; h>=0; h--) {
           shapePrint += m[h][w];
@@ -80,7 +96,7 @@ export class RotatingShape {
         rotation = this.rotateSquareLeft(width, height, m)
       }
       
-      return new RotatingShape(rotation);
+      return new RotatingShape(rotation, this.id);
   }
 
   rotateSquareLeft(width, height, m) {

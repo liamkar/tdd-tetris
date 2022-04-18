@@ -7,11 +7,16 @@ function distinctOrientations(shape) {
   let goingRight = shape;
   let goingLeft = shape;
   for (let i = 0; i < 10; i++) {
+    
     distinct.add(goingRight.toString());
     goingRight = goingRight.rotateRight();
+    console.log('goingRight', goingRight.toString())
     distinct.add(goingLeft.toString());
+    
     goingLeft = goingLeft.rotateLeft();
+    console.log('goingLeft', goingLeft.toString())
   }
+  console.log(distinct)
   return distinct;
 }
 
@@ -99,7 +104,7 @@ describe("The O shape", () => {
     );
   });
 
-  xit("cannot be rotated right/clockwise", () => {
+  it("cannot be rotated right/clockwise", () => {
     expect(shape.rotateRight().toString()).to.equalShape(
       `.OO
        .OO
