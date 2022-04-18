@@ -11,13 +11,13 @@ export class Tetromino {
         .....
         IIII.
         .....
-        .....`, 'I'
+        .....`, 'I', 2
      );
 
     static O_SHAPE = new RotatingShape(
         `.OO
         .OO
-        ...`, 'O'
+        ...`, 'O', 0
     )
 
   }
