@@ -88,6 +88,8 @@ export class RotatingShape {
       let rotation = "";
       //ok, now I'm starting to lose it completely - i really dont understand what is the problem with
       //rotating this to left - but lets add this bubblegum fix here now just to pass the test
+      if (this.rotationIsValid()) {
+      
       if (this.id === 'I')  {
         console.log('I SYMBOL ROTATION')
         rotation = this.rotateSquareRight(width, height, m)
@@ -95,7 +97,10 @@ export class RotatingShape {
       else {
         rotation = this.rotateSquareLeft(width, height, m)
       }
-      
+    }
+    else {
+      rotation = this.shape;
+    }
       return new RotatingShape(rotation, this.id);
   }
 
