@@ -11,7 +11,17 @@ export class RotatingShape {
     orientations = new Array(2);
     orientationCount;
 
-    constructor(shape, id, orientationCount, currentOrientation=0, oldShape) {
+    //the starting point of the shape
+    //positionRow;
+    //positionColumn;
+    boardPositions = new Map();
+
+    maxWidth;
+    maxHeight;
+    shapeHorizontalCenter;
+
+    constructor(shape, id, orientationCount, maxWidth, maxHeight, currentOrientation=0, oldShape) {
+    //constructor(shape, id, orientationCount, currentOrientation=0, oldShape) {
       this.shape = shape;
       let trimmedShape = this.shape.replaceAll(" ", "")
       let rowSplits = trimmedShape.split("\n");
@@ -25,6 +35,78 @@ export class RotatingShape {
       this.orientations[currentOrientation] = shape;
 
       this.orientations[(currentOrientation ? 0 :1)] = oldShape;
+
+      this.maxWidth = maxWidth;
+      this.maxHeight = maxHeight;
+      this.shapeHorizontalCenter = this.calculateShapeHorizontalCenterPosition();
+    }
+
+    //TODO: mostly copy paste from Board - lets refa to some util class if really needed in multiple places.
+    calculateShapeHorizontalCenterPosition() {
+      let centerHorizontal = Math.floor(this.maxWidth/2);
+      if (this.maxWidth%2 === 0) {
+        centerHorizontal--;
+      }
+      return centerHorizontal;
+    }
+
+    /*äh, dont calculate, why not get these as init values?
+    calculateMaxWidthAndHeightOfActualShape() {
+      let maxWidth = 0;
+      let maxHeight = 0;
+      for (let w = 0; w<this.width; w++) {
+        let atLeastOneMatchInRow = false;
+        for (let h = 0; h<this.height; h++) {
+          //shapePrint += m[h][w];
+          if (m[w][h] === this.icon) {
+            console.log()
+            atLeastOneMatchInRow = true;
+          }
+        }
+    }
+    */
+
+  
+    /**
+     * 
+     * @param {*} row how many steps down has shape already fallen since drop. If just dropped this value is zero.
+     * @param {*} boardHorizontalCenter 
+     */
+    calculatePositionsOnBoard(row, boardHorizontalCenter) {
+      //for (let w = this.width-1; w>=0; w--) {
+      let howManyEmptyRowsBeforeShapeContent = 0;
+      let atLeastOneResultOnLine = false;
+
+      for (let h = 0; h<this.height; h++) {
+        atLeastOneResultOnLine = false;
+
+        for (let w = 0; w<this.width; w++) {
+          if (m[h][w] === this.icon) {
+            atLeastOneResultOnLine = true
+            
+            let boardXCoordinate;
+            //let shapeXCoordinate = w+1;
+            //let distanceToCenter = this.shapeHorizontalCenter - (w+1)
+            let distanceToCenter = this.shapeHorizontalCenter - w
+            if (distanceToCenter > 0 ) {
+              boardXCoordinate = boardHorizontalCenter-distanceToCenter
+            }
+            else if (distanceToCenter < 0 ) {
+              boardXCoordinate = boardHorizontalCenter+distanceToCenter
+            }
+            else {
+              boardXCoordinate = boardHorizontalCenter;
+            }
+            //we have to do some nonsense plumbing as test shape strings containt those bloody nonsense dots around those real shape patterns.
+            let boardYCoordinate = row+(h-howManyEmptyRowsBeforeShapeContent)
+
+            boardPositions.set(boardYCoordinate, boardXCoordinate)
+          }        
+        }
+        if (!atLeastOneResultOnLine) {
+          howManyEmptyRowsBeforeShapeContent++
+        }
+      }
     }
 
     toString() {
@@ -66,6 +148,7 @@ export class RotatingShape {
       }
       return shapePrint;
     }
+
 
     rotateCommon(rotateRight) {
       let m = this.matrix;
@@ -111,7 +194,9 @@ export class RotatingShape {
     else {
       rotation = this.shape;
     }
-      return new RotatingShape(rotation, this.id, this.orientationCount, nextOrientation, originalRotation);
+      //when rotating, maxheight and maxwidth change place so that is why these values are mixed compared to constuctor
+      return new RotatingShape(rotation, this.id, this.orientationCount, this.maxHeight, this.maxWidth, nextOrientation, originalRotation);
+      //return new RotatingShape(rotation, this.id, this.orientationCount, nextOrientation, originalRotation);
 
     }
 
@@ -132,7 +217,5 @@ export class RotatingShape {
     }
     return shapePrint;
   }
-
-  rota
 
   }

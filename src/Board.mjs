@@ -6,9 +6,12 @@ export class Board {
  
   fallingBlock;
 
+  horizontalCenterPosition;
+
   constructor(width, height) {
     this.width = width;
     this.height = height;
+    this.horizontalCenterPosition = this.calculateBoardHorizontalCenterPosition();
   }
 
   toString() {
@@ -53,12 +56,15 @@ export class Board {
     if (this.fallingBlock) throw("already falling");
     block.positionRow = 0;
     //block.positionColumn = 1;
-    block.positionColumn = this.calculateBoardHorizontalCenterPosition(block)
+    //block.positionColumn = this.calculateBoardHorizontalCenterPosition(block)
+    block.positionColumn = this.horizontalCenterPosition;
+    block.calculatePositionsOnBoard(0, this.horizontalCenterPosition);
+
     //console.log(block.positionColumn)
     this.fallingBlock = block;
   };
 
-  calculateBoardHorizontalCenterPosition(block) {
+  calculateBoardHorizontalCenterPosition() {
     let centerHorizontal = Math.floor(this.width/2);
     if (this.width%2 === 0) {
       centerHorizontal--;
@@ -108,6 +114,8 @@ export class Board {
     for (let b=0; b<allBlocks.length; b++) {
       let block = allBlocks[b];
       if (block.positionRow === i && block.positionColumn === j) {        
+
+      //if (block.boardPositions.get(i) && block.boardPositions.get(i) === j) {
         return b;
       }
     }
@@ -143,7 +151,9 @@ export class Board {
 
   */
 
-   /*                       
+                          
+
+  /*
   calculateBlockCoordinatesOnBoard(row, column, block) {
     if (block.matrix) {
       let shapePartFound = false;
@@ -156,6 +166,19 @@ export class Board {
       for (let i=0; i<matrix[])
 
     }
+  }*/
+
+
+    //block is instnace of RotatingShape
+  //  block knows its own width, height and has matrix. Id corresponds to the "string pattern" the shape is made of.
+  //  ...and by block width and height we mean the whole width and height of the shape including the nonsens ... dots
+  // that have been used around the actual shape to make it a rectanglish shape.
+  // but of course, we are basically only interested in the actual content of the shape drawn using the ID values.
+
+  /*
+  calculateWidthOfBlock(block) {
+
+
   }
   */
 
