@@ -4,7 +4,7 @@ export class Tetromino {
 
     static T_SHAPE = new RotatingShape(`.T.
     TTT
-    ...`);
+    ...`, 'T');
 
     static I_SHAPE = new RotatingShape(
         `.....

@@ -10,19 +10,19 @@ function distinctOrientations(shape) {
     
     distinct.add(goingRight.toString());
     goingRight = goingRight.rotateRight();
-    console.log('goingRight', "\n"+goingRight.toString())
+    //console.log('goingRight', "\n"+goingRight.toString())
     distinct.add(goingLeft.toString());
     
     goingLeft = goingLeft.rotateLeft();
-    console.log('goingLeft', "\n"+goingLeft.toString())
+    //console.log('goingLeft', "\n"+goingLeft.toString())
   }
-  console.log(distinct)
+  //console.log(distinct)
   return distinct;
 }
 
 describe("The T shape", () => {
   const shape = Tetromino.T_SHAPE;
-  console.log('tetromino shape:', shape)
+  //console.log('tetromino shape:', shape)
   it("initial orientation", () => {
     expect(shape.toString()).to.equalShape(
       `.T.

@@ -39,6 +39,7 @@ export class Board {
     }
     boardPrint = boardPrint+NEW_LINE;
   }
+  console.log('boardprint:', boardPrint);
   return boardPrint;
 }
 
@@ -51,9 +52,19 @@ export class Board {
   drop(block) {
     if (this.fallingBlock) throw("already falling");
     block.positionRow = 0;
-    block.positionColumn = 1;
+    //block.positionColumn = 1;
+    block.positionColumn = this.calculateBoardHorizontalCenterPosition(block)
+    //console.log(block.positionColumn)
     this.fallingBlock = block;
   };
+
+  calculateBoardHorizontalCenterPosition(block) {
+    let centerHorizontal = Math.floor(this.width/2);
+    if (this.width%2 === 0) {
+      centerHorizontal--;
+    }
+    return centerHorizontal;
+  }
 
   hasFalling() {
     return this.fallingBlock ? true: false;
@@ -103,4 +114,61 @@ export class Board {
     return -1
   }
 
-}
+  //miten logiikka oikein menee?
+  /* 
+    -lasketaan koko shapen leveys?
+    -lasketaan kok oshapen korkeus?
+      -jos löytyy keskikohta leveydessä
+          -
+
+    -kelataan ekaksi sille riville kuvaajaan mistä löytyy tekstuuria.
+
+    -keskitytään ainoastaan tekstuuriosaan shapessa?
+      -lasketaan koko shapen leveys?
+      -lasketaan koko shapen korkeus?
+
+        -navigoidaan tekstuuriosan keskikohtaan ekalla sellaisella rivillä millä tekstuuria
+      -oli shape mikä hyvänsä, niin potentiiaalisesti sen max leveyden ja max korkeuden
+      kuutio voi sisältää tekstuuria missä vaan koordinaatissa
+        -iteroidana korkeuden mukaan (tarvitana korkeus)
+            -meillä on kuution leveys - sen alku ja loppupiste
+              -jokaisella rivillä tarkistetaan kuutio leveydeältä tekstuurimatchit
+                  -mihin matchi mäpätään boardilla?
+                      -tiedetään boardin keskikohta mihin halutaan shapen keskikohta tulevan
+                          -
+
+
+
+
+
+  */
+
+   /*                       
+  calculateBlockCoordinatesOnBoard(row, column, block) {
+    if (block.matrix) {
+      let shapePartFound = false;
+      let matrix = block.matrix;
+      for (let w = this.width-1; w>=0; w--) {
+        for (let h = 0; h<this.height; h++) {
+          shapePrint += m[h][w];
+        }
+     
+      for (let i=0; i<matrix[])
+
+    }
+  }
+  */
+
+    /*
+    this.calculateDropPosition(block) {
+      let centerHorizontal = Math.floor(this.width/2);
+      if (this.width%2 === 0) {
+        centerHorizontal--;
+      }
+      return centerHorizontal;
+    }
+    */
+
+  }
+
+//}
