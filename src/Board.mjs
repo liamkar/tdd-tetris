@@ -16,6 +16,9 @@ export class Board {
 
   directions = Movement.Directions;
 
+  highestYContainingShapePattern;
+  lowestXContainingShapePattern;
+
   constructor(width, height) {
     this.width = width;
     this.height = height;
@@ -145,7 +148,19 @@ export class Board {
     }
   }
   else {
-    this.fallingBlockPositions = nextShapePosition;
+    if (direction === this.directions.Left) {
+      if (this.isThereSpaceLeftOfBlock(nextShapePosition)) {
+        this.lowestXContainingShapePattern--
+        this.fallingBlockPositions = nextShapePosition;
+      }
+      else {
+        console.log('BLOCK REACHED THE LEFT LIMIT')
+      }
+
+    }
+    else {
+      this.fallingBlockPositions = nextShapePosition;
+    }
   }
 
 
@@ -165,6 +180,15 @@ export class Board {
     }
   }
 */
+
+  isThereSpaceLeftOfBlock(pushShapeOneStep) {
+    if (this.hasReachedLeftBoardEdge()) {
+      return false;
+    }
+    return true;
+  }
+
+
   isThereSpaceBelowBlock(pushShapeOneStepDown) {
     //if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown) >= 0) && 
     if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown)) && 
@@ -192,6 +216,13 @@ export class Board {
     }
     return true;
   }
+
+  hasReachedLeftBoardEdge() {
+      if (this.lowestXContainingShapePattern === 0) {
+        return true;
+      }
+      return false;
+    }
 
   findAnotherBlockJustBelow(pushShapeOneStepDown) {
     /*
@@ -393,6 +424,7 @@ export class Board {
 
       //let highestYContainingShapePattern = 0;
       this.highestYContainingShapePattern = 0;
+      this.lowestXContainingShapePattern = -1;
 
       let boardPositions = new Map();
       //console.log("this boardpositions before calculating them on drop",this.boardPositions)
@@ -437,6 +469,11 @@ export class Board {
 
             //this.highestYContainingShapePattern = boardYCoordinate
             this.highestYContainingShapePattern = boardYCoordinate
+
+            if (this.lowestXContainingShapePattern < 0 || (this.lowestXContainingShapePattern >0 && boardXCoordinate < this.lowestXContainingShapePattern )){
+              console.log('setting new lowest X:', boardXCoordinate)
+              this.lowestXContainingShapePattern = boardXCoordinate;
+            }
 
             //let xCoordinates = this.boardPositions.get(boardYCoordinate)
             //let xCoordinates = block.boardPositions.get(boardYCoordinate)

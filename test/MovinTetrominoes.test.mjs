@@ -62,22 +62,24 @@ describe("Moving tetrominoes", () => {
     );
   });
 
-/*
-  it("stop when they land on another block", () => {
+
+  it("it cannot be moved left beyond the board", () => {
     board.drop(Tetromino.T_SHAPE);
-    fallToBottom(board);
-    board.drop(Tetromino.T_SHAPE);
-    fallToBottom(board);
+    //should move only 3 steps at max, no matter how many times we push left, here we push it 4 times.
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
 
     expect(board.toString()).to.equalShape(
-      `..........
-       ..........
-       ....T.....
-       ...TTT....
-       ....T.....
-       ...TTT....`
-    );
+        `.T........
+         TTT.......
+         ..........
+         ..........
+         ..........
+         ..........`
+     );
   });
-  */
+  
 });
 
