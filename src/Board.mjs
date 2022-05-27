@@ -136,6 +136,13 @@ export class Board {
   }
   };
 
+
+  tickLeft() {
+    if (this.fallingBlock) {
+      this.fallingBlockPositions = this.pushShapeOneStepLeft();
+    }
+  }
+
   isThereSpaceBelowBlock(pushShapeOneStepDown) {
     //if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown) >= 0) && 
     if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown)) && 
@@ -267,7 +274,7 @@ export class Board {
   }
 */
   
-  pushShapeOneStepDown(block) {
+  pushShapeOneStepDown() {
     let oneStepDownPositions = new Map();
     //block.boardPositions.forEach((value,key,map) => {
     //block.boardPositions.forEach((value,key) => {
@@ -280,6 +287,24 @@ export class Board {
     //console.log(block.boardPositions)
     return oneStepDownPositions;
   }
+
+  pushShapeOneStepLeft() {
+    let oneStepLeftPositions = new Map();
+    //block.boardPositions.forEach((value,key,map) => {
+    //block.boardPositions.forEach((value,key) => {
+    this.fallingBlockPositions.forEach((value,key) => {
+      //oneStepDownBlock.set(key, value +1)
+      //const newArr = value.map(xCoordinate => xCoordinate + 1);
+      let leftPushedXCoordinates = value.map(xCoordinate => xCoordinate-1)
+      //oneStepLeftPositions.set(key, value-1)
+      oneStepLeftPositions.set(key, leftPushedXCoordinates)
+    })
+
+    //console.log(block.boardPositions)
+    return oneStepLeftPositions;
+  }
+
+
 
     /**
      * TODO:this does not work at all with those bloody Ts that contain even number of textures and 
