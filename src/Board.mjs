@@ -18,6 +18,7 @@ export class Board {
 
   highestYContainingShapePattern;
   lowestXContainingShapePattern;
+  biggestXContainingShapePattern;
 
   constructor(width, height) {
     this.width = width;
@@ -158,9 +159,21 @@ export class Board {
       }
 
     }
+    if (direction === this.directions.Right) {
+      if (this.isThereSpaceRightOfBlock(nextShapePosition)) {
+        this.biggestXContainingShapePattern++
+        this.fallingBlockPositions = nextShapePosition;
+      }
+      else {
+        console.log('BLOCK REACHED THE LEFT LIMIT')
+      }
+    }
+
+    /*
     else {
       this.fallingBlockPositions = nextShapePosition;
     }
+    */
   }
 
 
@@ -181,8 +194,15 @@ export class Board {
   }
 */
 
-  isThereSpaceLeftOfBlock(pushShapeOneStep) {
+  isThereSpaceLeftOfBlock() {
     if (this.hasReachedLeftBoardEdge()) {
+      return false;
+    }
+    return true;
+  }
+
+  isThereSpaceRightOfBlock() {
+    if (this.hasReachedRightBoardEdge()) {
       return false;
     }
     return true;
@@ -223,6 +243,13 @@ export class Board {
       }
       return false;
     }
+
+  hasReachedRightBoardEdge() {
+    if (this.biggestXContainingShapePattern >= this.width-1) {
+      return true;
+    }
+    return false;
+  }
 
   findAnotherBlockJustBelow(pushShapeOneStepDown) {
     /*
@@ -425,6 +452,7 @@ export class Board {
       //let highestYContainingShapePattern = 0;
       this.highestYContainingShapePattern = 0;
       this.lowestXContainingShapePattern = -1;
+      this.biggestXContainingShapePattern = -1;
 
       let boardPositions = new Map();
       //console.log("this boardpositions before calculating them on drop",this.boardPositions)
@@ -473,6 +501,12 @@ export class Board {
             if (this.lowestXContainingShapePattern < 0 || (this.lowestXContainingShapePattern >0 && boardXCoordinate < this.lowestXContainingShapePattern )){
               console.log('setting new lowest X:', boardXCoordinate)
               this.lowestXContainingShapePattern = boardXCoordinate;
+            }
+
+
+            if (this.biggestXContainingShapePattern < 0 || (this.biggestXContainingShapePattern > 0 && boardXCoordinate > this.biggestXContainingShapePattern )){
+              console.log('setting new biggest X:', boardXCoordinate)
+              this.biggestXContainingShapePattern = boardXCoordinate;
             }
 
             //let xCoordinates = this.boardPositions.get(boardYCoordinate)

@@ -80,6 +80,26 @@ describe("Moving tetrominoes", () => {
          ..........`
      );
   });
-  
+
+  it("it cannot be moved right beyond the board", () => {
+    board.drop(Tetromino.T_SHAPE);
+    //should move only 3 steps at max, no matter how many times we push left, here we push it 5 times.
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+
+    expect(board.toString()).to.equalShape(
+        `........T.
+         .......TTT
+         ..........
+         ..........
+         ..........
+         ..........`
+     );
+  });
+
+
 });
 
