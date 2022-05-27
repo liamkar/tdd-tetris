@@ -1,3 +1,5 @@
+import { Movement } from "../src/Movement.mjs";
+
 export class Board {
   width;
   height;
@@ -9,9 +11,10 @@ export class Board {
   fallingBlockPositions = new Map();
 
   horizontalCenterPosition;
-
   
   blockPositionsOnBoard = new Map();
+
+  directions = Movement.Directions;
 
   constructor(width, height) {
     this.width = width;
@@ -97,21 +100,28 @@ export class Board {
   }
 
 
-  tick() {
+  tick(direction=this.directions.Down) {
 
     //do not even run tick if there is no falling block
     if (this.fallingBlock) {
 
+      //set direction to be down by default, if not given
+      //if (!direction) direction = directions.Down;
+
     //console.log('board positions of falling block before pushing donw',this.fallingBlock.boardPositions)
     //console.log('board positions of falling block before pushing donw', boardPositions.get())
     console.log('board positions of falling block before pushing donw', this.fallingBlockPositions)
-    let pushShapeOneStepDown = this.pushShapeOneStepDown(this.fallingBlock)
-    console.log('pushShapeOneStepDown',this.fallingBlock.icon, pushShapeOneStepDown)
-    if (this.isThereSpaceBelowBlock(pushShapeOneStepDown)) {
+    //let nextShapePosition = this.pushShapeOneStepDown()
+    let nextShapePosition = this.pushShapeOneStep(direction);
+    console.log('pushShapeOneStepDown',this.fallingBlock.icon, nextShapePosition)
+
+    if (direction === this.directions.Down) {
+
+    if (this.isThereSpaceBelowBlock(nextShapePosition)) {
       //this.fallingBlock.positionRow += 1;
       
       //this.fallingBlock.boardPositions = pushShapeOneStepDown;
-      this.fallingBlockPositions = pushShapeOneStepDown;
+      this.fallingBlockPositions = nextShapePosition;
 
       //console.log('this.fallinbBlock.highestYContainingShapePattern',this.fallingBlock.highestYContainingShapePattern)
       //this.fallingBlock.highestYContainingShapePattern++;
@@ -134,9 +144,15 @@ export class Board {
       this.fallingBlockId = "";
     }
   }
+  else {
+    this.fallingBlockPositions = nextShapePosition;
+  }
+
+
+  }
   };
 
-
+/*
   tickLeft() {
     if (this.fallingBlock) {
       this.fallingBlockPositions = this.pushShapeOneStepLeft();
@@ -148,7 +164,7 @@ export class Board {
       this.fallingBlockPositions = this.pushShapeOneStepRight();
     }
   }
-
+*/
   isThereSpaceBelowBlock(pushShapeOneStepDown) {
     //if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown) >= 0) && 
     if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown)) && 
@@ -279,7 +295,39 @@ export class Board {
     }
   }
 */
-  
+
+  pushShapeOneStep(direction) {
+    let oneStepPushPositions = new Map();
+    //block.boardPositions.forEach((value,key,map) => {
+    //block.boardPositions.forEach((value,key) => {
+    this.fallingBlockPositions.forEach((value,key) => {
+      //oneStepDownBlock.set(key, value +1)
+      //const newArr = value.map(xCoordinate => xCoordinate + 1);
+
+      let newYCoordinate = key;
+      let newXCoordinates = value;
+      if (direction === this.directions.Down) {
+        newYCoordinate++;
+      }
+      else if (direction === this.directions.Left) {
+        let leftPushedXCoordinates = value.map(xCoordinate => xCoordinate-1)
+        newXCoordinates = leftPushedXCoordinates
+      }
+      else if (direction === this.directions.Right) {
+        //let leftPushedXCoordinates = value.map(xCoordinate => xCoordinate-1)
+        let rightPushedXCoordinates = value.map(xCoordinate => xCoordinate+1)
+        newXCoordinates = rightPushedXCoordinates
+      }
+      //oneStepDownPositions.set(key+1, value)
+      //oneStepPushPositions(newYCoordinate,newXCoordinates)
+      oneStepPushPositions.set(newYCoordinate,newXCoordinates)
+    })
+
+    //console.log(block.boardPositions)
+    return oneStepPushPositions;
+
+  }
+/*
   pushShapeOneStepDown() {
     let oneStepDownPositions = new Map();
     //block.boardPositions.forEach((value,key,map) => {
@@ -287,6 +335,8 @@ export class Board {
     this.fallingBlockPositions.forEach((value,key) => {
       //oneStepDownBlock.set(key, value +1)
       //const newArr = value.map(xCoordinate => xCoordinate + 1);
+      
+
       oneStepDownPositions.set(key+1, value)
     })
 
@@ -325,7 +375,7 @@ export class Board {
     //console.log(block.boardPositions)
     return oneStepRightPositions;
   }
-
+*/
 
     /**
      * TODO:this does not work at all with those bloody Ts that contain even number of textures and 

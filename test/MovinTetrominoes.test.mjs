@@ -2,7 +2,7 @@
 import { expect } from "chai";
 import { Board } from "../src/Board.mjs";
 import { Tetromino } from "../src/Tetromino.mjs";
-
+import { Movement } from "../src/Movement.mjs";
 
 function fallToBottom(board) {
   for (let i = 0; i < 10; i++) {
@@ -18,7 +18,7 @@ describe("Moving tetrominoes", () => {
 
   it("can be moved to left", () => {
     board.drop(Tetromino.T_SHAPE);
-    board.tickLeft();
+    board.tick(Movement.Directions.Left);
     expect(board.toString()).to.equalShape(
       `...T......
        ..TTT.....
@@ -32,7 +32,8 @@ describe("Moving tetrominoes", () => {
   it("can be moved right", () => {
     board.drop(Tetromino.T_SHAPE);
     //fallToBottom(board);
-    board.tickRight();
+    //board.tickRight();
+    board.tick(Movement.Directions.Right);
 
     expect(board.toString()).to.equalShape(
       `.....T....
