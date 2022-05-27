@@ -76,7 +76,10 @@ export class RotatingShape {
 
   
     /**
-     * 
+     * TODO:this does not work at all with those bloody Ts that contain even number of textures and 
+     * .f.e. this bloody  .** does not work at all seemingly?
+     *                    .**
+     *                    ...
      * @param {*} row how many steps down has shape already fallen since drop. If just dropped this value is zero.
      * @param {*} boardHorizontalCenter 
      */
@@ -86,6 +89,11 @@ export class RotatingShape {
       let atLeastOneResultOnLine = false;
 
       let highestYContainingShapePattern = 0;
+      console.log("this boardpositions before calculating them on drop",this.boardPositions)
+      //initialize boardpositions as it seems like otherwise these gets messed up between "different" blocks
+      //as tests seem not to create a new instance of a block when "a new" block is being dropped....
+      //..but this would clear data from prev T ....not working solution either.
+      //this.boardPositions = new Map();
       for (let h = 0; h<this.height; h++) {
         atLeastOneResultOnLine = false;
 
@@ -133,7 +141,8 @@ export class RotatingShape {
         }
       }
 
-      console.log("READY boardpositoins at rotating shape:"+this.boardPositions)
+      //console.log("READY boardpositoins at rotating shape:"+this.boardPositions)
+      console.log("READY boardpositoins at rotating shape:",this.boardPositions)
     }
 
     toString() {
