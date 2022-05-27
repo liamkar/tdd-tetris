@@ -79,6 +79,9 @@ export class Board {
 
   tick() {
 
+    //do not even run tick if there is no falling block
+    if (this.fallingBlock) {
+
     let pushShapeOneStepDown = this.pushShapeOneStepDown(this.fallingBlock)
     console.log('pushShapeOneStepDown',pushShapeOneStepDown)
     if (this.isThereSpaceBelowBlock(pushShapeOneStepDown)) {
@@ -96,6 +99,7 @@ export class Board {
       this.blocks.push(this.fallingBlock);
       this.fallingBlock = "";
     }
+  }
   };
 
   isThereSpaceBelowBlock(pushShapeOneStepDown) {
