@@ -28,21 +28,22 @@ describe("Moving tetrominoes", () => {
        ..........`
     );
   });
-/*
-  it("stop when they hit the bottom", () => {
+
+  it("can be moved right", () => {
     board.drop(Tetromino.T_SHAPE);
-    fallToBottom(board);
+    //fallToBottom(board);
+    board.tickRight();
 
     expect(board.toString()).to.equalShape(
-      `..........
+      `.....T....
+       ....TTT...
        ..........
        ..........
        ..........
-       ....T.....
-       ...TTT....`
+       ..........`
     );
   });
-
+/*
   it("stop when they land on another block", () => {
     board.drop(Tetromino.T_SHAPE);
     fallToBottom(board);

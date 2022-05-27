@@ -143,6 +143,12 @@ export class Board {
     }
   }
 
+  tickRight() {
+    if (this.fallingBlock) {
+      this.fallingBlockPositions = this.pushShapeOneStepRight();
+    }
+  }
+
   isThereSpaceBelowBlock(pushShapeOneStepDown) {
     //if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown) >= 0) && 
     if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown)) && 
@@ -304,6 +310,21 @@ export class Board {
     return oneStepLeftPositions;
   }
 
+  pushShapeOneStepRight() {
+    let oneStepRightPositions = new Map();
+    //block.boardPositions.forEach((value,key,map) => {
+    //block.boardPositions.forEach((value,key) => {
+    this.fallingBlockPositions.forEach((value,key) => {
+      //oneStepDownBlock.set(key, value +1)
+      //const newArr = value.map(xCoordinate => xCoordinate + 1);
+      let leftPushedXCoordinates = value.map(xCoordinate => xCoordinate+1)
+      //oneStepLeftPositions.set(key, value-1)
+      oneStepRightPositions.set(key, leftPushedXCoordinates)
+    })
+
+    //console.log(block.boardPositions)
+    return oneStepRightPositions;
+  }
 
 
     /**
