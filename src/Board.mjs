@@ -121,7 +121,7 @@ export class Board {
 
     if (direction === this.directions.Down) {
 
-    if (this.isThereSpaceBelowBlock(nextShapePosition)) {
+    if (this.isThereSpaceBelowBlock(nextShapePosition, direction)) {
       //this.fallingBlock.positionRow += 1;
       
       //this.fallingBlock.boardPositions = pushShapeOneStepDown;
@@ -149,25 +149,34 @@ export class Board {
     }
   }
   else {
-    if (direction === this.directions.Left) {
-      if (this.isThereSpaceLeftOfBlock(nextShapePosition)) {
-        this.lowestXContainingShapePattern--
+    
+      //if (this.isThereSpaceLeftOfBlock(nextShapePosition)) {
+      if (!this.hasReachedEdge(direction)) {
+        if (direction === this.directions.Right) {
+
+          this.biggestXContainingShapePattern++  
+          console.log('biggestXContainingShapePattern', this.biggestXContainingShapePattern)
+        }
+        else {
+          this.lowestXContainingShapePattern--
+        }
+
         this.fallingBlockPositions = nextShapePosition;
       }
       else {
         console.log('BLOCK REACHED THE LEFT LIMIT')
       }
 
-    }
-    if (direction === this.directions.Right) {
+    
+    /*
       if (this.isThereSpaceRightOfBlock(nextShapePosition)) {
-        this.biggestXContainingShapePattern++
+        
         this.fallingBlockPositions = nextShapePosition;
       }
       else {
         console.log('BLOCK REACHED THE LEFT LIMIT')
       }
-    }
+    */
 
     /*
     else {
@@ -194,6 +203,7 @@ export class Board {
   }
 */
 
+/*
   isThereSpaceLeftOfBlock() {
     if (this.hasReachedLeftBoardEdge()) {
       return false;
@@ -207,18 +217,49 @@ export class Board {
     }
     return true;
   }
+*/
 
-
-  isThereSpaceBelowBlock(pushShapeOneStepDown) {
+  isThereSpaceBelowBlock(pushShapeOneStepDown, direction) {
     //if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown) >= 0) && 
     if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown)) && 
-      !this.hasReachedBottomBoardEdge()) {
+      //!this.hasReachedBottomBoardEdge()) {
+        !this.hasReachedEdge(direction)) {
       //!this.hasReachedBottomBoardEdge(pushShapeOneStepDown)) {
     return true;
   }
     return false;
   }
 
+
+  hasReachedEdge(direction) {
+    let edgeReached = false;
+    if (direction === this.directions.Down) {
+      if (this.highestYContainingShapePattern === this.height-1) {
+        edgeReached =true;
+        //return false;
+      }
+    }
+
+    else if (direction === this.directions.Left) {
+      if (this.lowestXContainingShapePattern === 0) {
+        edgeReached = true;
+      }
+    }
+    else {
+      if (this.biggestXContainingShapePattern >= this.width-1) {
+        edgeReached = true;
+      }      
+    }
+
+    
+
+      //return true;
+
+
+    return edgeReached;
+  }
+
+  /*
   hasReachedBottomBoardEdge() {
   //hasReachedBottomBoardEdge(pushShapeOneStepDown) {
     //pushShapeOneStepDown.boardPositions.keys()
@@ -250,6 +291,7 @@ export class Board {
     }
     return false;
   }
+  */
 
   findAnotherBlockJustBelow(pushShapeOneStepDown) {
     /*
