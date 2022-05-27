@@ -1,4 +1,3 @@
-
 import { expect } from "chai";
 import { RotatingShape } from "../src/RotatingShape.mjs";
 

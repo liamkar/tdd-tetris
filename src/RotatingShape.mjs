@@ -19,6 +19,7 @@ export class RotatingShape {
     maxWidth;
     maxHeight;
     shapeHorizontalCenter;
+    highestYContainingShapePattern;
 
     constructor(shape, id, orientationCount, maxWidth, maxHeight, currentOrientation=0, oldShape) {
     //constructor(shape, id, orientationCount, currentOrientation=0, oldShape) {
@@ -40,6 +41,13 @@ export class RotatingShape {
       this.maxHeight = maxHeight;
       this.shapeHorizontalCenter = this.calculateShapeHorizontalCenterPosition();
     }
+
+    /* console says this is not a function, WTF?
+    blockIsAtThisPosition(x,y) {
+      return (this.boardPositions.get(x) && this.boardPositions.get(x) === y)
+    }
+    */
+    
 
     //TODO: mostly copy paste from Board - lets refa to some util class if really needed in multiple places.
     calculateShapeHorizontalCenterPosition() {
@@ -77,36 +85,55 @@ export class RotatingShape {
       let howManyEmptyRowsBeforeShapeContent = 0;
       let atLeastOneResultOnLine = false;
 
+      let highestYContainingShapePattern = 0;
       for (let h = 0; h<this.height; h++) {
         atLeastOneResultOnLine = false;
 
         for (let w = 0; w<this.width; w++) {
-          if (m[h][w] === this.icon) {
+          if (this.matrix[h][w] === this.icon) {
+            
+            console.log("atLeastOneResultOnLine")
             atLeastOneResultOnLine = true
             
             let boardXCoordinate;
             //let shapeXCoordinate = w+1;
             //let distanceToCenter = this.shapeHorizontalCenter - (w+1)
             let distanceToCenter = this.shapeHorizontalCenter - w
-            if (distanceToCenter > 0 ) {
+
+            //if (distanceToCenter > 0 ) {
+            //this works as when distanceToCenter is negative, there will be double negative, making it a + operation,
+            if (distanceToCenter !== 0 ) {
               boardXCoordinate = boardHorizontalCenter-distanceToCenter
             }
+            /*
             else if (distanceToCenter < 0 ) {
               boardXCoordinate = boardHorizontalCenter+distanceToCenter
             }
+            */
             else {
               boardXCoordinate = boardHorizontalCenter;
             }
             //we have to do some nonsense plumbing as test shape strings containt those bloody nonsense dots around those real shape patterns.
             let boardYCoordinate = row+(h-howManyEmptyRowsBeforeShapeContent)
 
-            boardPositions.set(boardYCoordinate, boardXCoordinate)
+            this.highestYContainingShapePattern = boardYCoordinate
+
+            let xCoordinates = this.boardPositions.get(boardYCoordinate)
+            if (!xCoordinates)  {
+              xCoordinates = []
+            }
+
+            xCoordinates.push(boardXCoordinate)
+            //boardPositions.set(boardYCoordinate, boardXCoordinate)
+            this.boardPositions.set(boardYCoordinate, xCoordinates)
           }        
         }
         if (!atLeastOneResultOnLine) {
           howManyEmptyRowsBeforeShapeContent++
         }
       }
+
+      console.log("READY boardpositoins at rotating shape:"+this.boardPositions)
     }
 
     toString() {

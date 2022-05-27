@@ -54,11 +54,12 @@ export class Board {
 
   drop(block) {
     if (this.fallingBlock) throw("already falling");
-    block.positionRow = 0;
     //block.positionColumn = 1;
     //block.positionColumn = this.calculateBoardHorizontalCenterPosition(block)
-    block.positionColumn = this.horizontalCenterPosition;
+    //block.positionColumn = this.horizontalCenterPosition;
     block.calculatePositionsOnBoard(0, this.horizontalCenterPosition);
+
+    console.log('CALCULATED POSITIONS AFTER DROP:', block.boardPositions)
 
     //console.log(block.positionColumn)
     this.fallingBlock = block;
@@ -77,50 +78,157 @@ export class Board {
   }
 
   tick() {
-    if (this.isThereSpaceBelowBlock()) {
-      this.fallingBlock.positionRow += 1;
+
+    let pushShapeOneStepDown = this.pushShapeOneStepDown(this.fallingBlock)
+    console.log('pushShapeOneStepDown',pushShapeOneStepDown)
+    if (this.isThereSpaceBelowBlock(pushShapeOneStepDown)) {
+      //this.fallingBlock.positionRow += 1;
+      this.fallingBlock.boardPositions = pushShapeOneStepDown;
+      console.log('this.fallinbBlock.highestYContainingShapePattern',this.fallingBlock.highestYContainingShapePattern)
+      this.fallingBlock.highestYContainingShapePattern++;
+      console.log('this.fallinbBlock.highestYContainingShapePattern',this.fallingBlock.highestYContainingShapePattern)
+      //this.fallingBlock = pushShapeOneStepDown;
   
     //else if (!this.hasBlockReachedTheBottom()) {      
     }
     else {
+      console.log('BLOCK REACHED THE LIMIT')
       this.blocks.push(this.fallingBlock);
       this.fallingBlock = "";
     }
   };
 
-  isThereSpaceBelowBlock() {
-    if (!(this.findAnotherBlockJustBelow() >= 0) && 
+  isThereSpaceBelowBlock(pushShapeOneStepDown) {
+    //if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown) >= 0) && 
+    if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown)) && 
       !this.hasReachedBottomBoardEdge()) {
+      //!this.hasReachedBottomBoardEdge(pushShapeOneStepDown)) {
     return true;
   }
     return false;
   }
 
   hasReachedBottomBoardEdge() {
-    if (this.fallingBlock.positionRow < this.height-1) {
+  //hasReachedBottomBoardEdge(pushShapeOneStepDown) {
+    //pushShapeOneStepDown.boardPositions.keys()
+    //let keys =[ ...pushShapeOneStepDown.boardPositions.keys() ];
+    //const max = Math.max(...arr);
+
+    //if (this.fallingBlock.positionRow < this.height-1) {
+    //we add +1 here to check against the next y coordinate if shape would drop one step down.
+    //if (this.fallingBlock.highestYContainingShapePattern+1 < this.height-1) {
+    console.log('this.fallingBlock at bottom check',this.fallingBlock)
+    if (this.fallingBlock.highestYContainingShapePattern < this.height-1) {
+    //if (this.fallingBlock.boardPositionspositionRow < this.height-1) {
       return false;
     }
     return true;
   }
 
-  findAnotherBlockJustBelow() {
+  findAnotherBlockJustBelow(pushShapeOneStepDown) {
+    /*
     const ONE_BELOW = 1
     if (this.blocks.length > 0) {
       return this.findBlock(this.blocks, this.fallingBlock.positionRow+ONE_BELOW, this.fallingBlock.positionColumn) 
     }
+    */
+    if (this.blocks.length > 0) {
+      console.log('just before calling checkConflictWithAnotherShape')
+      return this.checkConflictWithAnotherShape(pushShapeOneStepDown)
+    }
+  }
+
+  //checkConflictWithAnotherShape(shapeInNextPosition) {
+  checkConflictWithAnotherShape(nextBoardPositions) {
+    //let nextBoardPositions = shapeInNextPosition
+
+    //let yCoordinates =[ ...pushShapeOneStepDown.boardPositions.keys() ];
+    let yCoordinates =[ ...nextBoardPositions.keys() ];
+    console.log('yCoordinates', yCoordinates)
+    let atLeastOneOtherShapePositionConflict =  yCoordinates.some(y => {
+      let xCoordinates = nextBoardPositions.get(y);
+      console.log('xCoordinates in some loop', xCoordinates)
+      //return xCoordinates.some(x => {
+      let foundOne = xCoordinates.some(x => {
+        console.log('THE OTHER FALLEN BLOCK: ',this.blocks[0].boardPositions)
+        return (this.findBlock(this.blocks, y, x) >= 0)
+      })
+      console.log('foundOne', foundOne)
+      return foundOne;
+    });
+
+    console.log('atLeastOneOtherShapePositionConflict', atLeastOneOtherShapePositionConflict)
+    return atLeastOneOtherShapePositionConflict
+/*
+    nextBoardPositions.forEach((xCoordinates, y) => {
+      xCoordinates.forEach(x => {
+        this.findBlock(this.blocks, y, x) {
+        }      
+      })
+    });
+*/
   }
 
   findBlock(allBlocks, i, j) {
     for (let b=0; b<allBlocks.length; b++) {
       let block = allBlocks[b];
-      if (block.positionRow === i && block.positionColumn === j) {        
+      //if (block.positionRow === i && block.positionColumn === j) {        
 
       //if (block.boardPositions.get(i) && block.boardPositions.get(i) === j) {
+      //if  (block.blockIsAtThisPosition(i, j)) {
+      if (this.blockIsAtThisPosition(i,j, block)) {
         return b;
+        //return 
       }
     }
     return -1
   }
+
+  //blockIsAtThisPosition(x,y, block) {
+  blockIsAtThisPosition(y,x, block) {
+    //console.log("at blockis at this positions");
+    //console.log(block.boardPositions)
+
+    //return (block.boardPositions.get(x) && block.boardPositions.get(x) === y)
+    let xCoordinatesAtY = block.boardPositions.get(y);
+    //console.log("xCoordinatesAtY", xCoordinatesAtY)
+
+    //let isBlockPartlyAtThisPosition = (xCoordinatesAtY && xCoordinatesAtY.includes(x));
+    let isBlockPartlyAtThisPosition = false;
+    if (xCoordinatesAtY && xCoordinatesAtY.includes(x)) {
+      isBlockPartlyAtThisPosition= true;
+    }
+    //console.log('isBlockPartlyAtThisPosition', isBlockPartlyAtThisPosition)
+    
+    return isBlockPartlyAtThisPosition
+  }
+
+  findAnotherShapeJustBelow() {
+    //const ONE_BELOW = 1
+    if (this.blocks.length > 0) {
+      return this.findBlock(this.blocks, this.fallingBlock.positionRow+ONE_BELOW, this.fallingBlock.positionColumn) 
+    }
+  }
+
+  
+  pushShapeOneStepDown(block) {
+    let oneStepDownPositions = new Map();
+    //block.boardPositions.forEach((value,key,map) => {
+    block.boardPositions.forEach((value,key) => {
+      //oneStepDownBlock.set(key, value +1)
+      //const newArr = value.map(xCoordinate => xCoordinate + 1);
+      oneStepDownPositions.set(key+1, value)
+    })
+
+    //console.log(block.boardPositions)
+    return oneStepDownPositions;
+  }
+
+  /*
+  boardContainsBlockOnPosition(block, x, y) {
+
+  }
+  */
 
   //miten logiikka oikein menee?
   /* 
