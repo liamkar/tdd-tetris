@@ -44,6 +44,24 @@ describe("Moving tetrominoes", () => {
        ..........`
     );
   });
+
+  //how this actually differs from previous down 
+  it("can be moved down", () => {
+    board.drop(Tetromino.T_SHAPE);
+    //fallToBottom(board);
+    //board.tickRight();
+    board.tick(Movement.Directions.Down);
+
+    expect(board.toString()).to.equalShape(
+      `..........
+       ....T.....
+       ...TTT....
+       ..........
+       ..........
+       ..........`
+    );
+  });
+
 /*
   it("stop when they land on another block", () => {
     board.drop(Tetromino.T_SHAPE);
