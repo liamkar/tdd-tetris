@@ -1,6 +1,7 @@
 //import { times } from "lodash";
 
 import { Movement } from "./Movement.mjs";
+import { Utils } from "./Utils.mjs";
 
 export class RotatingShape {
     shape;
@@ -41,7 +42,8 @@ export class RotatingShape {
 
       this.maxWidth = maxWidth;
       this.maxHeight = maxHeight;
-      this.shapeHorizontalCenter = this.calculateShapeHorizontalCenterPosition();
+      //this.shapeHorizontalCenter = this.calculateShapeHorizontalCenterPosition();
+      this.shapeHorizontalCenter = Utils.calculateItemHorizontalCenterPosition(this.maxWidth);
     }
 
     /* console says this is not a function, WTF?
@@ -50,7 +52,7 @@ export class RotatingShape {
     }
     */
     
-
+/*
     //TODO: mostly copy paste from Board - lets refa to some util class if really needed in multiple places.
     calculateShapeHorizontalCenterPosition() {
       let centerHorizontal = Math.floor(this.maxWidth/2);
@@ -59,6 +61,8 @@ export class RotatingShape {
       }
       return centerHorizontal;
     }
+*/
+
 
     /*äh, dont calculate, why not get these as init values?
     calculateMaxWidthAndHeightOfActualShape() {

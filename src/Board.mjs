@@ -1,4 +1,5 @@
 import { Movement } from "../src/Movement.mjs";
+import { Utils } from "./Utils.mjs";
 
 export class Board {
   width;
@@ -13,7 +14,7 @@ export class Board {
   horizontalCenterPosition;
   
   blockPositionsOnBoard = new Map();
-  blockRotationsOnBoard = new Map();
+  
 
   directions = Movement.Directions;
 
@@ -21,10 +22,15 @@ export class Board {
   lowestXContainingShapePattern;
   biggestXContainingShapePattern;
 
+  //the x, y co
+  fallingBlockTopLeftCornerCoordinatesOnBoard = []
+  //blockRotationsOnBoard = new Map();
+
   constructor(width, height) {
     this.width = width;
     this.height = height;
-    this.horizontalCenterPosition = this.calculateBoardHorizontalCenterPosition();
+    //this.horizontalCenterPosition = this.calculateBoardHorizontalCenterPosition();
+    this.horizontalCenterPosition = Utils.calculateItemHorizontalCenterPosition(this.width);
   }
 
   toString() {
@@ -82,7 +88,10 @@ export class Board {
     this.fallingBlockId = this.blocks.length;
 
     //let boardPositionsForOneBlock = this.calculatePositionsOnBoard(0, block)
-    this.fallingBlockPositions = this.calculatePositionsOnBoard(0, block)
+    //this.fallingBlockPositions = this.calculatePositionsOnBoard(0,0, block)
+    let xCoordinateDrawStartPoint = this.initializeFallingBlockTopLeftCornerXCoordinateOnBoard(block)
+    this.fallingBlockPositions = this.calculatePositionsOnBoard(0, xCoordinateDrawStartPoint, block)
+    this.fallingBlockTopLeftCornerCoordinatesOnBoard = [0,xCoordinateDrawStartPoint]
     
     //console.log('CALCULATED POSITIONS AFTER DROP:', block.boardPositions)
     console.log('CALCULATED POSITIONS AFTER DROP:', this.fallingBlockPositions)
@@ -92,6 +101,61 @@ export class Board {
     this.fallingBlock = block;
   };
 
+  initializeFallingBlockTopLeftCornerXCoordinateOnBoard(block) {
+    //let xCoordinate = this.horizontalCenterPosition - block.width;
+
+
+    console.log('this.horizontalCenterPosition',this.horizontalCenterPosition)
+    console.log('block.shapeHorizontalCenter',block.shapeHorizontalCenter)
+    let xCoordinate = this.horizontalCenterPosition - block.shapeHorizontalCenter;
+    return xCoordinate;
+  }
+
+  updateFallingBlockTopLeftCornerCoordinatesOnBoard(direction) {
+    //let xCoordinate = this.horizontalCenterPosition - block.width;
+    let y = this.fallingBlockTopLeftCornerCoordinatesOnBoard[0];
+    let x = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
+    if (direction === Movement.Directions.Down) {
+      this.fallingBlockTopLeftCornerCoordinatesOnBoard[0] = y+1;
+    }
+    if (direction === Movement.Directions.Right) {
+      this.fallingBlockTopLeftCornerCoordinatesOnBoard[1] = x+1;
+    }
+    if (direction === Movement.Directions.Left) {
+      this.fallingBlockTopLeftCornerCoordinatesOnBoard[1] = x-1;
+    }
+  }
+
+  rotate() {
+    //dont do rotation if no actual rotations can happen for the shape.
+    if (this.fallingBlock.orientationCount > 0) {
+      let nextRotation = this.fallingBlock.rotate();
+      //TODO:but how on earth we connect this to the current position on board?
+      //well, I guess, we have to keep track somehow where our block is - yes we already have the dots in store
+      //that we have to draw, but we also need to store x y coordinate on board for fallingBlock to be able to reach
+      //for that position to be able the re-draw it after rotate.
+      //so, let's first try start storing this x,y coordinate
+
+      console.log('nextRotation:',nextRotation.toString());
+
+      //lets clear previous board print coordinates after rotation
+      this.blockPositionsOnBoard.delete(this.fallingBlockId);
+
+      //calculate new board printing coordinates according to new rotation
+      let yCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[0];
+      let xCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
+      console.log('JUST BEFORE CALCULATING NEW POSITIONS AFTER ROTATE')
+      let rotatedBlockPositionsOnBoard = this.calculatePositionsOnBoard(yCoordinate, xCoordinate, nextRotation);
+      console.log('rotatedBlockPositionsOnBoard', rotatedBlockPositionsOnBoard)
+      this.blockPositionsOnBoard.set(this.fallingBlockId, rotatedBlockPositionsOnBoard);
+      this.fallingBlock = nextRotation;
+  }
+
+     
+
+  }
+
+  /*
   calculateBoardHorizontalCenterPosition() {
     let centerHorizontal = Math.floor(this.width/2);
     if (this.width%2 === 0) {
@@ -99,12 +163,14 @@ export class Board {
     }
     return centerHorizontal;
   }
+  */
 
   hasFalling() {
     return this.fallingBlock ? true: false;
   }
 
 
+  //by default tick moves one step down
   tick(direction=this.directions.Down) {
 
     //do not even run tick if there is no falling block
@@ -116,6 +182,7 @@ export class Board {
     if (this.isThereSpaceToMove(nextShapePosition, direction)) {
 
       this.fallingBlockPositions = nextShapePosition;
+      this.updateFallingBlockTopLeftCornerCoordinatesOnBoard(direction);
 
         if (direction === this.directions.Right) {
 
@@ -145,11 +212,13 @@ export class Board {
   };
 
   isThereSpaceToMove(pushShapeOneStepDown, direction) {
-    if (!(this.isAnotherBlockOnTheWay(pushShapeOneStepDown)) && 
-        !this.hasReachedEdge(direction)) {
-    return true;
-  }
-    return false;
+    //if (!(this.isAnotherBlockOnTheWay(pushShapeOneStepDown)) && 
+        //!this.hasReachedEdge(direction)) {
+    let spaceAvailable = true;
+    if (this.isAnotherBlockOnTheWay(pushShapeOneStepDown) || this.hasReachedEdge(direction)) {
+      spaceAvailable = false;
+    }
+    return spaceAvailable;
   }
 
   hasReachedEdge(direction) {
@@ -253,6 +322,8 @@ export class Board {
     return oneStepPushPositions;
   }
 
+  fallingBlockTopLeftCornerCoordinatesOnBoard
+
     /**
      * TODO:this does not work at all with those bloody Ts that contain even number of textures and 
      * .f.e. this bloody  .** does not work at all seemingly?
@@ -262,9 +333,14 @@ export class Board {
      * @param {*} boardHorizontalCenter 
      */
     //calculatePositionsOnBoard(row, boardHorizontalCenter) {
-    calculatePositionsOnBoard(row, block) {
+    //calculatePositionsOnBoard(row, block) {
+    calculatePositionsOnBoard(row, column, block) {
+      console.log('row', row)
+      console.log('column', column)
       //for (let w = this.width-1; w>=0; w--) {
-      let howManyEmptyRowsBeforeShapeContent = 0;
+      
+      //let howManyEmptyRowsBeforeShapeContent = 0;
+            
       let atLeastOneResultOnLine = false;
 
       //let highestYContainingShapePattern = 0;
@@ -273,12 +349,6 @@ export class Board {
       this.biggestXContainingShapePattern = -1;
 
       let boardPositions = new Map();
-      //console.log("this boardpositions before calculating them on drop",this.boardPositions)
-      //initialize boardpositions as it seems like otherwise these gets messed up between "different" blocks
-      //as tests seem not to create a new instance of a block when "a new" block is being dropped....
-      //..but this would clear data from prev T ....not working solution either....
-      //this.boardPositions = new Map();
-      //for (let h = 0; h<this.height; h++) {
 
       for (let h = 0; h<block.height; h++) {
         atLeastOneResultOnLine = false;
@@ -294,6 +364,8 @@ export class Board {
             console.log("atLeastOneResultOnLine")
             atLeastOneResultOnLine = true
             
+            let boardXCoordinate = column+w
+            /*
             let boardXCoordinate;
             //let shapeXCoordinate = w+1;
             //let distanceToCenter = this.shapeHorizontalCenter - (w+1)
@@ -304,14 +376,18 @@ export class Board {
             //this works as when distanceToCenter is negative, there will be double negative, making it a + operation,
             if (distanceToCenter !== 0 ) {
               //boardXCoordinate = boardHorizontalCenter-distanceToCenter
-              boardXCoordinate = this.horizontalCenterPosition-distanceToCenter
+              //boardXCoordinate = this.horizontalCenterPosition-distanceToCenter
+              boardXCoordinate = column-distanceToCenter
             }
             else {
               //boardXCoordinate = boardHorizontalCenter;
-              boardXCoordinate = this.horizontalCenterPosition;
+              //boardXCoordinate = this.horizontalCenterPosition;
+              boardXCoordinate = column;
             }
+            */
             //we have to do some nonsense plumbing as test shape strings containt those bloody nonsense dots around those real shape patterns.
-            let boardYCoordinate = row+(h-howManyEmptyRowsBeforeShapeContent)
+            //let boardYCoordinate = row+(h-howManyEmptyRowsBeforeShapeContent)
+            let boardYCoordinate = row+h
 
             //this.highestYContainingShapePattern = boardYCoordinate
             this.highestYContainingShapePattern = boardYCoordinate
@@ -342,9 +418,11 @@ export class Board {
             boardPositions.set(boardYCoordinate, xCoordinates)
           }        
         }
+        /*
         if (!atLeastOneResultOnLine) {
           howManyEmptyRowsBeforeShapeContent++
         }
+        */
       }
 
       //console.log("READY boardpositoins at rotating shape:"+this.boardPositions)

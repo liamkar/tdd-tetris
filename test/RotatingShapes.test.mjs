@@ -75,4 +75,3 @@ describe("Rotating 5x5 shape", () => {
     );
   });
 });
-
