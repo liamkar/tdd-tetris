@@ -126,10 +126,10 @@ export class Board {
     }
   }
 
-  rotate() {
+  rotate(direction) {
     //dont do rotation if no actual rotations can happen for the shape.
     if (this.fallingBlock.orientationCount > 0) {
-      let nextRotation = this.fallingBlock.rotate();
+      let nextRotation = this.fallingBlock.rotate(direction);
       //TODO:but how on earth we connect this to the current position on board?
       //well, I guess, we have to keep track somehow where our block is - yes we already have the dots in store
       //that we have to draw, but we also need to store x y coordinate on board for fallingBlock to be able to reach

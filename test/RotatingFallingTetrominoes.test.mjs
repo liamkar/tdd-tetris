@@ -47,6 +47,22 @@ describe("Rotating falling tetrominoes", () => {
     );
   });
 
+  it("can be rotated to right", () => {
+    board.drop(Tetromino.T_SHAPE);
+    //board.tick(Movement.Directions.Left);
+    board.rotate(Movement.Directions.Right)
+    expect(board.toString()).to.equalShape(
+      `....T.....
+       ....TT....
+       ....T.....
+       ..........
+       ..........
+       ..........`
+    );
+  });
+
+
+
   /*
   it("can be moved right", () => {
     board.drop(Tetromino.T_SHAPE);
