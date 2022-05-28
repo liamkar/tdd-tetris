@@ -1,5 +1,7 @@
 //import { times } from "lodash";
 
+import { Movement } from "./Movement.mjs";
+
 export class RotatingShape {
     shape;
 
@@ -83,6 +85,7 @@ export class RotatingShape {
      * @param {*} row how many steps down has shape already fallen since drop. If just dropped this value is zero.
      * @param {*} boardHorizontalCenter 
      */
+    /*
     calculatePositionsOnBoard(row, boardHorizontalCenter) {
       //for (let w = this.width-1; w>=0; w--) {
       let howManyEmptyRowsBeforeShapeContent = 0;
@@ -92,7 +95,7 @@ export class RotatingShape {
       console.log("this boardpositions before calculating them on drop",this.boardPositions)
       //initialize boardpositions as it seems like otherwise these gets messed up between "different" blocks
       //as tests seem not to create a new instance of a block when "a new" block is being dropped....
-      //..but this would clear data from prev T ....not working solution either.
+      //..but this would clear data from prev T ....not working solution either....
       //this.boardPositions = new Map();
       for (let h = 0; h<this.height; h++) {
         atLeastOneResultOnLine = false;
@@ -113,12 +116,7 @@ export class RotatingShape {
             if (distanceToCenter !== 0 ) {
               boardXCoordinate = boardHorizontalCenter-distanceToCenter
             }
-            /*
-            else if (distanceToCenter < 0 ) {
-              boardXCoordinate = boardHorizontalCenter+distanceToCenter
-            }
-            */
-            else {
+                  else {
               boardXCoordinate = boardHorizontalCenter;
             }
             //we have to do some nonsense plumbing as test shape strings containt those bloody nonsense dots around those real shape patterns.
@@ -144,7 +142,7 @@ export class RotatingShape {
       //console.log("READY boardpositoins at rotating shape:"+this.boardPositions)
       console.log("READY boardpositoins at rotating shape:",this.boardPositions)
     }
-
+*/
     toString() {
         return this.shape.replaceAll(" ", "")+"\n";
 
@@ -158,9 +156,11 @@ export class RotatingShape {
         */
     }
 
+    /*
     rotateRight() {
       return this.rotateCommon(true);
     }
+    */
 
     rotationIsValid() {
       //by 'O' we mean all squares - no matter how you rotate a square the shape will always be same - no effect.
@@ -186,10 +186,17 @@ export class RotatingShape {
     }
 
 
-    rotateCommon(rotateRight) {
+    //rotateCommon(rotateRight) {
+    rotate(direction) {
       let m = this.matrix;
       let width = this.width;
       let height = this.height;
+
+      let rotateRight = false;
+      if (direction === Movement.Directions.Right) {
+        rotateRight = true;
+      }
+
       /*
       return new RotatingShape(
         ""+m[0][width-1]  +m[1][width-1]        +m[2][width-1]+"\n"
@@ -236,9 +243,11 @@ export class RotatingShape {
 
     }
 
+    /*
     rotateLeft() {
       return this.rotateCommon(false);
   }
+  */
 
   rotateSquareLeft(width, height, m) {
     let shapePrint ="";

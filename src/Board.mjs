@@ -13,6 +13,7 @@ export class Board {
   horizontalCenterPosition;
   
   blockPositionsOnBoard = new Map();
+  blockRotationsOnBoard = new Map();
 
   directions = Movement.Directions;
 

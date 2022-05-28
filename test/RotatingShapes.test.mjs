@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { RotatingShape } from "../src/RotatingShape.mjs";
+import { Movement } from "../src/Movement.mjs";
 
 describe("Rotating 3x3 shape", () => {
   const shape = new RotatingShape(
@@ -17,7 +18,7 @@ describe("Rotating 3x3 shape", () => {
   });
 
   it("can be rotated right/clockwise", () => {
-    expect(shape.rotateRight().toString()).to.equalShape(
+    expect(shape.rotate(Movement.Directions.Right).toString()).to.equalShape(
       `GDA
        HEB
        IFC`
@@ -25,7 +26,7 @@ describe("Rotating 3x3 shape", () => {
   });
 
   it("can be rotated left/counter-clockwise", () => {
-    expect(shape.rotateLeft().toString()).to.equalShape(
+    expect(shape.rotate(Movement.Directions.Left).toString()).to.equalShape(
       `CFI
        BEH
        ADG`
@@ -55,7 +56,7 @@ describe("Rotating 5x5 shape", () => {
   });
 
   it("can be rotated right/clockwise", () => {
-    expect(shape.rotateRight().toString()).to.equalShape(
+    expect(shape.rotate(Movement.Directions.Right).toString()).to.equalShape(
       `UPKFA
        VQLGB
        WRMHC
@@ -65,7 +66,7 @@ describe("Rotating 5x5 shape", () => {
   });
 
   it("can be rotated left/counter-clockwise", () => {
-    expect(shape.rotateLeft().toString()).to.equalShape(
+    expect(shape.rotate(Movement.Directions.Left).toString()).to.equalShape(
       `EJOTY
        DINSX
        CHMRW
