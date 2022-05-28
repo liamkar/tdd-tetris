@@ -4,7 +4,7 @@ import { Board } from "../src/Board.mjs";
 import { Tetromino } from "../src/Tetromino.mjs";
 import { Movement } from "../src/Movement.mjs";
 
-function forceOverTheLimit(board, direction) {
+function forceToTheLimit(board, direction) {
     for (let i = 0; i < 10; i++) {
       board.tick(direction);
     }
@@ -61,7 +61,7 @@ describe("Moving tetrominoes", () => {
 
   it("it cannot be moved left beyond the board", () => {
     board.drop(Tetromino.T_SHAPE);
-    forceOverTheLimit(board, Movement.Directions.Left);
+    forceToTheLimit(board, Movement.Directions.Left);
 
     expect(board.toString()).to.equalShape(
         `.T........
@@ -76,7 +76,7 @@ describe("Moving tetrominoes", () => {
   it("it cannot be moved right beyond the board", () => {
     board.drop(Tetromino.T_SHAPE);
 
-    forceOverTheLimit(board, Movement.Directions.Right);
+    forceToTheLimit(board, Movement.Directions.Right);
 
     expect(board.toString()).to.equalShape(
         `........T.
@@ -90,7 +90,7 @@ describe("Moving tetrominoes", () => {
 
   it("it cannot be moved down beyond the board", () => {
     board.drop(Tetromino.T_SHAPE);
-    forceOverTheLimit(board, Movement.Directions.Down);
+    forceToTheLimit(board, Movement.Directions.Down);
 
     expect(board.toString()).to.equalShape(
         `..........
@@ -99,6 +99,37 @@ describe("Moving tetrominoes", () => {
          ..........
          ....T.....
          ...TTT....
+         `
+     );
+  });
+
+  it("it cannot be moved left through other blocks", () => {
+    board.drop(Tetromino.T_SHAPE);
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+    //we have to drop current shape down, before dropping a new shape to the board
+    forceToTheLimit(board,Movement.Directions.Down)
+
+    board.drop(Tetromino.T_SHAPE);
+    board.tick(Movement.Directions.Down);
+    board.tick(Movement.Directions.Down);
+    board.tick(Movement.Directions.Down);
+    //this left should be ok
+    board.tick(Movement.Directions.Left);
+    //from these left ticks on, no changes should happen
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+
+
+    expect(board.toString()).to.equalShape(
+        `..........
+         ..........
+         ..........
+         ...T......
+         .TTTT.....
+         TTT.......
          `
      );
   });

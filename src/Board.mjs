@@ -109,31 +109,24 @@ export class Board {
     //do not even run tick if there is no falling block
     if (this.fallingBlock) {
 
-      //set direction to be down by default, if not given
-      //if (!direction) direction = directions.Down;
-
-    //console.log('board positions of falling block before pushing donw',this.fallingBlock.boardPositions)
-    //console.log('board positions of falling block before pushing donw', boardPositions.get())
-    console.log('board positions of falling block before pushing donw', this.fallingBlockPositions)
-    //let nextShapePosition = this.pushShapeOneStepDown()
     let nextShapePosition = this.pushShapeOneStep(direction);
     console.log('pushShapeOneStepDown',this.fallingBlock.icon, nextShapePosition)
 
-    if (direction === this.directions.Down) {
+    if (this.isThereSpaceToMove(nextShapePosition, direction)) {
 
-    if (this.isThereSpaceBelowBlock(nextShapePosition, direction)) {
-      //this.fallingBlock.positionRow += 1;
-      
-      //this.fallingBlock.boardPositions = pushShapeOneStepDown;
       this.fallingBlockPositions = nextShapePosition;
 
-      //console.log('this.fallinbBlock.highestYContainingShapePattern',this.fallingBlock.highestYContainingShapePattern)
-      //this.fallingBlock.highestYContainingShapePattern++;
-      this.highestYContainingShapePattern++;
-      //console.log('this.fallinbBlock.highestYContainingShapePattern',this.fallingBlock.highestYContainingShapePattern)
-      //this.fallingBlock = pushShapeOneStepDown;
-  
-    //else if (!this.hasBlockReachedTheBottom()) {      
+        if (direction === this.directions.Right) {
+
+          this.biggestXContainingShapePattern++  
+          console.log('biggestXContainingShapePattern', this.biggestXContainingShapePattern)
+        }
+        else if (direction === this.directions.Down) {
+          this.highestYContainingShapePattern++;
+        }
+        else { //left case
+          this.lowestXContainingShapePattern--
+        }
     }
     else {
       console.log('BLOCK REACHED THE LIMIT')
@@ -148,98 +141,23 @@ export class Board {
       this.fallingBlockId = "";
     }
   }
-  else {
-    
-      //if (this.isThereSpaceLeftOfBlock(nextShapePosition)) {
-      if (!this.hasReachedEdge(direction)) {
-        if (direction === this.directions.Right) {
-
-          this.biggestXContainingShapePattern++  
-          console.log('biggestXContainingShapePattern', this.biggestXContainingShapePattern)
-        }
-        else {
-          this.lowestXContainingShapePattern--
-        }
-
-        this.fallingBlockPositions = nextShapePosition;
-      }
-      else {
-        console.log('BLOCK REACHED THE LEFT LIMIT')
-      }
-
-    
-    /*
-      if (this.isThereSpaceRightOfBlock(nextShapePosition)) {
-        
-        this.fallingBlockPositions = nextShapePosition;
-      }
-      else {
-        console.log('BLOCK REACHED THE LEFT LIMIT')
-      }
-    */
-
-    /*
-    else {
-      this.fallingBlockPositions = nextShapePosition;
-    }
-    */
-  }
-
-
-  }
   };
 
-/*
-  tickLeft() {
-    if (this.fallingBlock) {
-      this.fallingBlockPositions = this.pushShapeOneStepLeft();
-    }
-  }
-
-  tickRight() {
-    if (this.fallingBlock) {
-      this.fallingBlockPositions = this.pushShapeOneStepRight();
-    }
-  }
-*/
-
-/*
-  isThereSpaceLeftOfBlock() {
-    if (this.hasReachedLeftBoardEdge()) {
-      return false;
-    }
-    return true;
-  }
-
-  isThereSpaceRightOfBlock() {
-    if (this.hasReachedRightBoardEdge()) {
-      return false;
-    }
-    return true;
-  }
-*/
-
-  isThereSpaceBelowBlock(pushShapeOneStepDown, direction) {
-    //if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown) >= 0) && 
-    if (!(this.findAnotherBlockJustBelow(pushShapeOneStepDown)) && 
-      //!this.hasReachedBottomBoardEdge()) {
+  isThereSpaceToMove(pushShapeOneStepDown, direction) {
+    if (!(this.isAnotherBlockOnTheWay(pushShapeOneStepDown)) && 
         !this.hasReachedEdge(direction)) {
-      //!this.hasReachedBottomBoardEdge(pushShapeOneStepDown)) {
     return true;
   }
     return false;
   }
-
 
   hasReachedEdge(direction) {
     let edgeReached = false;
     if (direction === this.directions.Down) {
       if (this.highestYContainingShapePattern === this.height-1) {
         edgeReached =true;
-        //return false;
       }
     }
-
     else if (direction === this.directions.Left) {
       if (this.lowestXContainingShapePattern === 0) {
         edgeReached = true;
@@ -250,73 +168,24 @@ export class Board {
         edgeReached = true;
       }      
     }
-
-    
-
-      //return true;
-
-
     return edgeReached;
   }
 
-  /*
-  hasReachedBottomBoardEdge() {
-  //hasReachedBottomBoardEdge(pushShapeOneStepDown) {
-    //pushShapeOneStepDown.boardPositions.keys()
-    //let keys =[ ...pushShapeOneStepDown.boardPositions.keys() ];
-    //const max = Math.max(...arr);
 
-    //if (this.fallingBlock.positionRow < this.height-1) {
-    //we add +1 here to check against the next y coordinate if shape would drop one step down.
-    //if (this.fallingBlock.highestYContainingShapePattern+1 < this.height-1) {
-    console.log('this.fallingBlock at bottom check',this.fallingBlock)
-    //if (this.fallingBlock.highestYContainingShapePattern < this.height-1) {
-    if (this.highestYContainingShapePattern < this.height-1) {
-    //if (this.fallingBlock.boardPositionspositionRow < this.height-1) {
-      return false;
-    }
-    return true;
-  }
-
-  hasReachedLeftBoardEdge() {
-      if (this.lowestXContainingShapePattern === 0) {
-        return true;
-      }
-      return false;
-    }
-
-  hasReachedRightBoardEdge() {
-    if (this.biggestXContainingShapePattern >= this.width-1) {
-      return true;
-    }
-    return false;
-  }
-  */
-
-  findAnotherBlockJustBelow(pushShapeOneStepDown) {
-    /*
-    const ONE_BELOW = 1
-    if (this.blocks.length > 0) {
-      return this.findBlock(this.blocks, this.fallingBlock.positionRow+ONE_BELOW, this.fallingBlock.positionColumn) 
-    }
-    */
+  isAnotherBlockOnTheWay(pushShapeOneStepDown) {
     if (this.blocks.length > 0) {
       console.log('just before calling checkConflictWithAnotherShape')
       return this.checkConflictWithAnotherShape(pushShapeOneStepDown)
     }
   }
 
-  //checkConflictWithAnotherShape(shapeInNextPosition) {
-  checkConflictWithAnotherShape(nextBoardPositions) {
-    //let nextBoardPositions = shapeInNextPosition
 
-    //let yCoordinates =[ ...pushShapeOneStepDown.boardPositions.keys() ];
+  checkConflictWithAnotherShape(nextBoardPositions) {
     let yCoordinates =[ ...nextBoardPositions.keys() ];
     console.log('yCoordinates', yCoordinates)
     let atLeastOneOtherShapePositionConflict =  yCoordinates.some(y => {
       let xCoordinates = nextBoardPositions.get(y);
       console.log('xCoordinates in some loop', xCoordinates)
-      //return xCoordinates.some(x => {
       let foundOne = xCoordinates.some(x => {
         console.log('how many other fallen blocks: ',this.blocks.length)
         console.log('THE OTHER FALLEN BLOCK: ',this.blocks[0].boardPositions)
@@ -328,43 +197,19 @@ export class Board {
 
     console.log('atLeastOneOtherShapePositionConflict', atLeastOneOtherShapePositionConflict)
     return atLeastOneOtherShapePositionConflict
-/*
-    nextBoardPositions.forEach((xCoordinates, y) => {
-      xCoordinates.forEach(x => {
-        this.findBlock(this.blocks, y, x) {
-        }      
-      })
-    });
-*/
   }
 
   findBlock(allBlocks, i, j) {
     for (let b=0; b<allBlocks.length; b++) {
       let block = allBlocks[b];
-      //if (block.positionRow === i && block.positionColumn === j) {        
-
-      //if (block.boardPositions.get(i) && block.boardPositions.get(i) === j) {
-      //if  (block.blockIsAtThisPosition(i, j)) {
-      //if (this.blockIsAtThisPosition(i,j, block)) {
       if (this.blockIsAtThisPosition(i,j, b)) {
         return b;
-        //return 
       }
     }
     return -1
   }
 
-  //blockIsAtThisPosition(x,y, block) {
-  //blockIsAtThisPosition(y,x, block) {
   blockIsAtThisPosition(y,x, blockId) {
-    //console.log("at blockis at this positions");
-    //console.log(block.boardPositions)
-
-    //return (block.boardPositions.get(x) && block.boardPositions.get(x) === y)
-    //let block = 
-    //let xCoordinatesAtY = block.boardPositions.get(y);
-    //console.log("BEFORE ERROR:",this.blockPositionsOnBoard.get(blockId))
-    //console.log()
     let xCoordinatesAtY = null;
     let coordinates = this.blockPositionsOnBoard.get(blockId);
     if (coordinates) {
@@ -375,34 +220,18 @@ export class Board {
       xCoordinatesAtY = this.fallingBlockPositions.get(y);
     }
     
-    //console.log("xCoordinatesAtY", xCoordinatesAtY)
-
-    //let isBlockPartlyAtThisPosition = (xCoordinatesAtY && xCoordinatesAtY.includes(x));
     let isBlockPartlyAtThisPosition = false;
     if (xCoordinatesAtY && xCoordinatesAtY.includes(x)) {
       isBlockPartlyAtThisPosition= true;
     }
-    //console.log('isBlockPartlyAtThisPosition', isBlockPartlyAtThisPosition)
     
     return isBlockPartlyAtThisPosition
   }
 
-  /*
-  findAnotherShapeJustBelow() {
-    //const ONE_BELOW = 1
-    if (this.blocks.length > 0) {
-      return this.findBlock(this.blocks, this.fallingBlock.positionRow+ONE_BELOW, this.fallingBlock.positionColumn) 
-    }
-  }
-*/
 
   pushShapeOneStep(direction) {
     let oneStepPushPositions = new Map();
-    //block.boardPositions.forEach((value,key,map) => {
-    //block.boardPositions.forEach((value,key) => {
     this.fallingBlockPositions.forEach((value,key) => {
-      //oneStepDownBlock.set(key, value +1)
-      //const newArr = value.map(xCoordinate => xCoordinate + 1);
 
       let newYCoordinate = key;
       let newXCoordinates = value;
@@ -414,68 +243,14 @@ export class Board {
         newXCoordinates = leftPushedXCoordinates
       }
       else if (direction === this.directions.Right) {
-        //let leftPushedXCoordinates = value.map(xCoordinate => xCoordinate-1)
         let rightPushedXCoordinates = value.map(xCoordinate => xCoordinate+1)
         newXCoordinates = rightPushedXCoordinates
       }
-      //oneStepDownPositions.set(key+1, value)
-      //oneStepPushPositions(newYCoordinate,newXCoordinates)
       oneStepPushPositions.set(newYCoordinate,newXCoordinates)
     })
 
-    //console.log(block.boardPositions)
     return oneStepPushPositions;
-
   }
-/*
-  pushShapeOneStepDown() {
-    let oneStepDownPositions = new Map();
-    //block.boardPositions.forEach((value,key,map) => {
-    //block.boardPositions.forEach((value,key) => {
-    this.fallingBlockPositions.forEach((value,key) => {
-      //oneStepDownBlock.set(key, value +1)
-      //const newArr = value.map(xCoordinate => xCoordinate + 1);
-      
-
-      oneStepDownPositions.set(key+1, value)
-    })
-
-    //console.log(block.boardPositions)
-    return oneStepDownPositions;
-  }
-
-  pushShapeOneStepLeft() {
-    let oneStepLeftPositions = new Map();
-    //block.boardPositions.forEach((value,key,map) => {
-    //block.boardPositions.forEach((value,key) => {
-    this.fallingBlockPositions.forEach((value,key) => {
-      //oneStepDownBlock.set(key, value +1)
-      //const newArr = value.map(xCoordinate => xCoordinate + 1);
-      let leftPushedXCoordinates = value.map(xCoordinate => xCoordinate-1)
-      //oneStepLeftPositions.set(key, value-1)
-      oneStepLeftPositions.set(key, leftPushedXCoordinates)
-    })
-
-    //console.log(block.boardPositions)
-    return oneStepLeftPositions;
-  }
-
-  pushShapeOneStepRight() {
-    let oneStepRightPositions = new Map();
-    //block.boardPositions.forEach((value,key,map) => {
-    //block.boardPositions.forEach((value,key) => {
-    this.fallingBlockPositions.forEach((value,key) => {
-      //oneStepDownBlock.set(key, value +1)
-      //const newArr = value.map(xCoordinate => xCoordinate + 1);
-      let leftPushedXCoordinates = value.map(xCoordinate => xCoordinate+1)
-      //oneStepLeftPositions.set(key, value-1)
-      oneStepRightPositions.set(key, leftPushedXCoordinates)
-    })
-
-    //console.log(block.boardPositions)
-    return oneStepRightPositions;
-  }
-*/
 
     /**
      * TODO:this does not work at all with those bloody Ts that contain even number of textures and 
@@ -578,84 +353,4 @@ export class Board {
 
       return boardPositions;
     }
-
-
-  /*
-  boardContainsBlockOnPosition(block, x, y) {
-
   }
-  */
-
-  //miten logiikka oikein menee?
-  /* 
-    -lasketaan koko shapen leveys?
-    -lasketaan kok oshapen korkeus?
-      -jos löytyy keskikohta leveydessä
-          -
-
-    -kelataan ekaksi sille riville kuvaajaan mistä löytyy tekstuuria.
-
-    -keskitytään ainoastaan tekstuuriosaan shapessa?
-      -lasketaan koko shapen leveys?
-      -lasketaan koko shapen korkeus?
-
-        -navigoidaan tekstuuriosan keskikohtaan ekalla sellaisella rivillä millä tekstuuria
-      -oli shape mikä hyvänsä, niin potentiiaalisesti sen max leveyden ja max korkeuden
-      kuutio voi sisältää tekstuuria missä vaan koordinaatissa
-        -iteroidana korkeuden mukaan (tarvitana korkeus)
-            -meillä on kuution leveys - sen alku ja loppupiste
-              -jokaisella rivillä tarkistetaan kuutio leveydeältä tekstuurimatchit
-                  -mihin matchi mäpätään boardilla?
-                      -tiedetään boardin keskikohta mihin halutaan shapen keskikohta tulevan
-                          -
-
-
-
-
-
-  */
-
-                          
-
-  /*
-  calculateBlockCoordinatesOnBoard(row, column, block) {
-    if (block.matrix) {
-      let shapePartFound = false;
-      let matrix = block.matrix;
-      for (let w = this.width-1; w>=0; w--) {
-        for (let h = 0; h<this.height; h++) {
-          shapePrint += m[h][w];
-        }
-     
-      for (let i=0; i<matrix[])
-
-    }
-  }*/
-
-
-    //block is instnace of RotatingShape
-  //  block knows its own width, height and has matrix. Id corresponds to the "string pattern" the shape is made of.
-  //  ...and by block width and height we mean the whole width and height of the shape including the nonsens ... dots
-  // that have been used around the actual shape to make it a rectanglish shape.
-  // but of course, we are basically only interested in the actual content of the shape drawn using the ID values.
-
-  /*
-  calculateWidthOfBlock(block) {
-
-
-  }
-  */
-
-    /*
-    this.calculateDropPosition(block) {
-      let centerHorizontal = Math.floor(this.width/2);
-      if (this.width%2 === 0) {
-        centerHorizontal--;
-      }
-      return centerHorizontal;
-    }
-    */
-
-  }
-
-//}
