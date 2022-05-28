@@ -133,5 +133,37 @@ describe("Moving tetrominoes", () => {
          `
      );
   });
+
+  it("it cannot be moved right through other blocks", () => {
+    board.drop(Tetromino.T_SHAPE);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    //we have to drop current shape down, before dropping a new shape to the board
+    forceToTheLimit(board,Movement.Directions.Down)
+
+    board.drop(Tetromino.T_SHAPE);
+    board.tick(Movement.Directions.Down);
+    board.tick(Movement.Directions.Down);
+    board.tick(Movement.Directions.Down);
+    //this left should be ok
+    board.tick(Movement.Directions.Right);
+    //from these left ticks on, no changes should happen
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+
+
+    expect(board.toString()).to.equalShape(
+        `..........
+         ..........
+         ..........
+         .....T....
+         ....TTTT..
+         ......TTT.
+         `
+     );
+  });
+
 });
 
