@@ -61,6 +61,20 @@ describe("Rotating falling tetrominoes", () => {
     );
   });
 
+  it("O shape rotation does not change visually", () => {
+    board.drop(Tetromino.O_SHAPE);
+    //board.tick(Movement.Directions.Left);
+    board.rotate(Movement.Directions.Right)
+    expect(board.toString()).to.equalShape(
+      `....OO....
+       ....OO....
+       ..........
+       ..........
+       ..........
+       ..........`
+    );
+  });
+
 
 
   /*

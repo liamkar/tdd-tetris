@@ -364,7 +364,19 @@ export class Board {
             console.log("atLeastOneResultOnLine")
             atLeastOneResultOnLine = true
             
+            
             let boardXCoordinate = column+w
+            
+            /*
+            let boardXCoordinate;
+            let distanceToCenter = block.shapeHorizontalCenter - w
+            if (distanceToCenter !== 0 ) {
+              boardXCoordinate = column-distanceToCenter
+            }
+            else {             
+              boardXCoordinate = column;
+            }
+*/
             /*
             let boardXCoordinate;
             //let shapeXCoordinate = w+1;
