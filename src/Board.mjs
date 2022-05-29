@@ -143,7 +143,14 @@ export class Board {
 
       //calculate new board printing coordinates according to new rotation
       let yCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[0];
+      
+      //let xCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
+      //basically, shouldnt we initialize the x after rotate?...but we can't...it might be moved by user as well
+      //actually, we should adjust it based on the difference cause by rotation, oh bugger this is getting hard.
+      //other alternative might be to adjust situation at drawing phase, but how would it work?
+      //...let's leave it here for now, its just getting way too complicated.
       let xCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
+
       console.log('JUST BEFORE CALCULATING NEW POSITIONS AFTER ROTATE')
       let rotatedBlockPositionsOnBoard = this.calculatePositionsOnBoard(yCoordinate, xCoordinate, nextRotation);
       console.log('rotatedBlockPositionsOnBoard', rotatedBlockPositionsOnBoard)
@@ -339,7 +346,7 @@ export class Board {
       console.log('column', column)
       //for (let w = this.width-1; w>=0; w--) {
       
-      //let howManyEmptyRowsBeforeShapeContent = 0;
+      let howManyEmptyRowsBeforeShapeContent = 0;
             
       let atLeastOneResultOnLine = false;
 
@@ -398,8 +405,10 @@ export class Board {
             }
             */
             //we have to do some nonsense plumbing as test shape strings containt those bloody nonsense dots around those real shape patterns.
-            //let boardYCoordinate = row+(h-howManyEmptyRowsBeforeShapeContent)
-            let boardYCoordinate = row+h
+            //strips out the empty rows in RotatingShape Object and starts
+            let boardYCoordinate = row+(h-howManyEmptyRowsBeforeShapeContent)
+            //let boardYCoordinate = row+h
+            //let boardYCoordinate = row - howManyEmptyRowsBeforeShapeContent
 
             //this.highestYContainingShapePattern = boardYCoordinate
             this.highestYContainingShapePattern = boardYCoordinate
@@ -430,11 +439,11 @@ export class Board {
             boardPositions.set(boardYCoordinate, xCoordinates)
           }        
         }
-        /*
+        
         if (!atLeastOneResultOnLine) {
           howManyEmptyRowsBeforeShapeContent++
         }
-        */
+        
       }
 
       //console.log("READY boardpositoins at rotating shape:"+this.boardPositions)
