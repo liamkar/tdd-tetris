@@ -4,6 +4,7 @@ import { Board } from "../src/Board.mjs";
 import { Tetromino } from "../src/Tetromino.mjs";
 import { Movement } from "../src/Movement.mjs";
 
+
 function forceToTheLimit(board, direction) {
     for (let i = 0; i < 10; i++) {
       board.tick(direction);

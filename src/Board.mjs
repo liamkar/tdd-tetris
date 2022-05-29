@@ -242,7 +242,8 @@ export class Board {
       console.log('just before check has rotation broke over edges')
       console.log(this.lowestXContainingShapePattern)
       console.log(this.fallingBlockPositions);
-      if (!this.hasBrokeOutOfEdge(minMaxData)) {
+      console.log('minMaxData',minMaxData)
+      if (!this.hasBrokenOutOfEdge(minMaxData)) {
         console.log('ROTATION FITS TO BOARD!',minMaxData)
 
 
@@ -357,13 +358,16 @@ export class Board {
     return edgeReached;
   }
 
-  hasBrokeOutOfEdge(minMaxCoordinates) {
+  hasBrokenOutOfEdge(minMaxCoordinates) {
     /*
     if (this.highestYContainingShapePattern >= this.height ||
       this.lowestXContainingShapePattern < 0 ||
       this.biggestXContainingShapePattern >= this.width)
     {
       */
+
+    console.log(this.height)
+    console.log(this.width)
     if (minMaxCoordinates.highestYContainingShapePattern >= this.height ||
       minMaxCoordinates.lowestXContainingShapePattern < 0 ||
       minMaxCoordinates.biggestXContainingShapePattern >= this.width) {

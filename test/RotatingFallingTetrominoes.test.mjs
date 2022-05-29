@@ -245,7 +245,44 @@ describe("Rotating falling tetrominoes", () => {
   });
 
 
-  
+  it("will not rotate if hits through bottom", () => {
+    board.drop(Tetromino.T_SHAPE);
+    forceToTheLimit(board, Movement.Directions.Down);
+    board.drop(Tetromino.I_SHAPE);
+    board.tick(Movement.Directions.Down);
+    board.tick(Movement.Directions.Down);
+    board.tick(Movement.Directions.Down);
+    //this rotate shold not happen as goes over bottom edge so expecting IIII not to turn
+    board.rotate(Movement.Directions.Left)
+
+    expect(board.toString()).to.equalShape(
+      `..........
+       ..........
+       ..........
+       ...IIII...
+       ....T.....
+       ...TTT....`
+    );
+  });
+
+  xit("will not rotate if hits another block", () => {
+    board.drop(Tetromino.T_SHAPE);
+    forceToTheLimit(board, Movement.Directions.Down);
+    board.drop(Tetromino.I_SHAPE);
+    board.tick(Movement.Directions.Down);
+    board.tick(Movement.Directions.Down);
+    //this rotate shold not happen so expecting IIII not to turn
+    board.rotate(Movement.Directions.Left)
+
+    expect(board.toString()).to.equalShape(
+      `..........
+       ..........
+       ...IIII...
+       ..........
+       ....T.....
+       ...TTT....`
+    );
+  });
 
   /*
   it("can be moved right", () => {
