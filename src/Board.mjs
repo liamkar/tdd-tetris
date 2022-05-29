@@ -91,6 +91,10 @@ export class Board {
     //this.fallingBlockPositions = this.calculatePositionsOnBoard(0,0, block)
     let xCoordinateDrawStartPoint = this.initializeFallingBlockTopLeftCornerXCoordinateOnBoard(block)
     this.fallingBlockPositions = this.calculatePositionsOnBoard(0, xCoordinateDrawStartPoint, block)
+
+    let minMaxData = this.readMinMaxXYCoordinatesInBlockPrint(this.fallingBlockPositions);
+    this.setMinMaxXYCoordinates(minMaxData)
+
     this.fallingBlockTopLeftCornerCoordinatesOnBoard = [0,xCoordinateDrawStartPoint]
     
     //console.log('CALCULATED POSITIONS AFTER DROP:', block.boardPositions)
@@ -100,6 +104,85 @@ export class Board {
     //console.log(block.positionColumn)
     this.fallingBlock = block;
   };
+
+  setMinMaxXYCoordinates(coordinates) {
+    this.lowestXContainingShapePattern = coordinates.lowestXContainingShapePattern;
+    this.biggestXContainingShapePattern = coordinates.biggestXContainingShapePattern;
+    this.highestYContainingShapePattern = coordinates.highestYContainingShapePattern;
+  }
+
+  readMinMaxXYCoordinatesInBlockPrint(blockPositions) {
+    //blockPositions.keys().
+    
+    let minMaxCoordinates = {}
+
+    //this.highestYContainingShapePattern = Math.max(...blockPositions.keys());
+    minMaxCoordinates.highestYContainingShapePattern = Math.max(...blockPositions.keys());
+
+    /*
+    //blockPositions.values
+    let tempValues = blockPositions.values()
+    console.log('tempValues', tempValues)
+    let allValues = Array.from(...blockPositions.values())
+    //let allValues = blockPositions.values()
+    //let allvalues = (...[].concat(...blockPositions.values()))
+
+    allValues.
+    */
+
+    let minX;
+    let minXDefined = false;
+    let maxX;
+    let maxXDefined = false;
+
+
+    blockPositions.forEach(value => {
+      //console.log(value);
+      value.forEach(x => {
+        //console.log(x);
+        if (!minXDefined || x < minX) {
+          minXDefined = true;
+          minX = x;
+        }
+        if (!maxXDefined || x > maxX) {
+          maxXDefined = true;
+          maxX = x;
+        }
+      })
+
+    })
+
+    /*
+    console.log('allValues', allValues)
+    let minX;
+    let minXDefined = false;
+    let maxX;
+    let maxXDefined = false;
+    //allValues.forEach(xCoordinates => {
+    allValues.forEach(x => {
+      //console.log('xCoordinates:', xCoordinates)
+      //xCoordinates.forEach(x => {
+        if (!minXDefined || x < minX) {
+          minXDefined = true;
+          minX = x;
+        }
+        if (!maxXDefined || x > maxX) {
+          maxXDefined = true;
+          maxX = x;
+        }
+      //})
+    })
+*/
+    /*
+    this.lowestXContainingShapePattern;
+    this.biggestXContainingShapePattern;
+    */
+
+    minMaxCoordinates.lowestXContainingShapePattern = minX;
+    minMaxCoordinates.biggestXContainingShapePattern = maxX;
+
+    return minMaxCoordinates;
+  }
 
   initializeFallingBlockTopLeftCornerXCoordinateOnBoard(block) {
     //let xCoordinate = this.horizontalCenterPosition - block.width;
@@ -128,6 +211,7 @@ export class Board {
 
   rotate(direction) {
     //dont do rotation if no actual rotations can happen for the shape.
+    console.log("fallingBlockPositions before rotate:",this.fallingBlockPositions);
     if (this.fallingBlock.orientationCount > 0) {
       let nextRotation = this.fallingBlock.rotate(direction);
       //TODO:but how on earth we connect this to the current position on board?
@@ -138,24 +222,44 @@ export class Board {
 
       console.log('nextRotation:',nextRotation.toString());
 
-      //lets clear previous board print coordinates after rotation
-      this.blockPositionsOnBoard.delete(this.fallingBlockId);
-
-      //calculate new board printing coordinates according to new rotation
-      let yCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[0];
+            //calculate new board printing coordinates according to new rotation
+            let yCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[0];
       
-      //let xCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
-      //basically, shouldnt we initialize the x after rotate?...but we can't...it might be moved by user as well
-      //actually, we should adjust it based on the difference cause by rotation, oh bugger this is getting hard.
-      //other alternative might be to adjust situation at drawing phase, but how would it work?
-      //...let's leave it here for now, its just getting way too complicated.
-      let xCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
+            //let xCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
+            //basically, shouldnt we initialize the x after rotate?...but we can't...it might be moved by user as well
+            //actually, we should adjust it based on the difference cause by rotation, oh bugger this is getting hard.
+            //other alternative might be to adjust situation at drawing phase, but how would it work?
+            //...let's leave it here for now, its just getting way too complicated.
+            let xCoordinate = this.fallingBlockTopLeftCornerCoordinatesOnBoard[1];
+      
+
 
       console.log('JUST BEFORE CALCULATING NEW POSITIONS AFTER ROTATE')
       let rotatedBlockPositionsOnBoard = this.calculatePositionsOnBoard(yCoordinate, xCoordinate, nextRotation);
+      let minMaxData = this.readMinMaxXYCoordinatesInBlockPrint(rotatedBlockPositionsOnBoard);
+      //setMinMaxXYCoordinates(minMaxData)
+
+      console.log('just before check has rotation broke over edges')
+      console.log(this.lowestXContainingShapePattern)
+      console.log(this.fallingBlockPositions);
+      if (!this.hasBrokeOutOfEdge(minMaxData)) {
+        console.log('ROTATION FITS TO BOARD!',minMaxData)
+
+
+      //if (this.lowestXContainingShapePattern >= 0 && this.high)
+
+      //lets clear previous board print coordinates after rotation 
+      //this.blockPositionsOnBoard.delete(this.fallingBlockId);
+
+
+      
       console.log('rotatedBlockPositionsOnBoard', rotatedBlockPositionsOnBoard)
-      this.blockPositionsOnBoard.set(this.fallingBlockId, rotatedBlockPositionsOnBoard);
+      //this.blockPositionsOnBoard.set(this.fallingBlockId, rotatedBlockPositionsOnBoard);
+      this.fallingBlockPositions = rotatedBlockPositionsOnBoard;
       this.fallingBlock = nextRotation;
+      //this.falligBlockRo
+      this.setMinMaxXYCoordinates(minMaxData)
+      }
   }
 
      
@@ -184,7 +288,7 @@ export class Board {
     if (this.fallingBlock) {
 
     let nextShapePosition = this.pushShapeOneStep(direction);
-    console.log('pushShapeOneStepDown',this.fallingBlock.icon, nextShapePosition)
+    console.log('next shep position after tick',this.fallingBlock.icon, nextShapePosition)
 
     if (this.isThereSpaceToMove(nextShapePosition, direction)) {
 
@@ -210,10 +314,15 @@ export class Board {
       //alright, probably the purpose of the tests was to guide us developers to not mix boardpositions data with shapes
       //and not to implement such terrible mess i have been producing all week long. 
       //so...lets see if boardpositios could be somehow refactored to board and away from shape....
-      this.blocks.push(this.fallingBlock);
-      this.fallingBlock = "";    
-      this.blockPositionsOnBoard.set(this.fallingBlockId, this.fallingBlockPositions);
-      this.fallingBlockId = "";
+
+      //move block from falling status to falled status only if the operation reaching the end was Down-movement.
+      //so let's NOT stop falling if reached the edges of the area.
+      if (direction === this.directions.Down) {
+        this.blocks.push(this.fallingBlock);
+        this.fallingBlock = "";    
+        this.blockPositionsOnBoard.set(this.fallingBlockId, this.fallingBlockPositions);
+        this.fallingBlockId = "";
+      }
     }
   }
   };
@@ -246,6 +355,21 @@ export class Board {
       }      
     }
     return edgeReached;
+  }
+
+  hasBrokeOutOfEdge(minMaxCoordinates) {
+    /*
+    if (this.highestYContainingShapePattern >= this.height ||
+      this.lowestXContainingShapePattern < 0 ||
+      this.biggestXContainingShapePattern >= this.width)
+    {
+      */
+    if (minMaxCoordinates.highestYContainingShapePattern >= this.height ||
+      minMaxCoordinates.lowestXContainingShapePattern < 0 ||
+      minMaxCoordinates.biggestXContainingShapePattern >= this.width) {
+      return true;
+    }
+    return false;
   }
 
 
@@ -350,10 +474,15 @@ export class Board {
             
       let atLeastOneResultOnLine = false;
 
+/*
       //let highestYContainingShapePattern = 0;
       this.highestYContainingShapePattern = 0;
+      let lowestXDefined = false;
+
+      //i guess defining these here is bad coding pratice: functino does more than one thing now..
       this.lowestXContainingShapePattern = -1;
       this.biggestXContainingShapePattern = -1;
+*/
 
       let boardPositions = new Map();
 
@@ -410,12 +539,17 @@ export class Board {
             //let boardYCoordinate = row+h
             //let boardYCoordinate = row - howManyEmptyRowsBeforeShapeContent
 
+
+
+/*
             //this.highestYContainingShapePattern = boardYCoordinate
             this.highestYContainingShapePattern = boardYCoordinate
 
-            if (this.lowestXContainingShapePattern < 0 || (this.lowestXContainingShapePattern >0 && boardXCoordinate < this.lowestXContainingShapePattern )){
+            //if (this.lowestXContainingShapePattern < 0 || (this.lowestXContainingShapePattern >0 && boardXCoordinate < this.lowestXContainingShapePattern )){
+            if (!lowestXDefined || boardXCoordinate < this.lowestXContainingShapePattern ){
               console.log('setting new lowest X:', boardXCoordinate)
               this.lowestXContainingShapePattern = boardXCoordinate;
+              lowestXDefined= true;
             }
 
 
@@ -423,6 +557,9 @@ export class Board {
               console.log('setting new biggest X:', boardXCoordinate)
               this.biggestXContainingShapePattern = boardXCoordinate;
             }
+*/
+
+
 
             //let xCoordinates = this.boardPositions.get(boardYCoordinate)
             //let xCoordinates = block.boardPositions.get(boardYCoordinate)

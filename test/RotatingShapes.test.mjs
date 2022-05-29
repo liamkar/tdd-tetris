@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { RotatingShape } from "../src/RotatingShape.mjs";
 import { Movement } from "../src/Movement.mjs";
 
+
 describe("Rotating 3x3 shape", () => {
   const shape = new RotatingShape(
     `ABC

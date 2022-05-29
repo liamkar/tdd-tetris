@@ -3,7 +3,6 @@ import { expect } from "chai";
 import { Tetromino } from "../src/Tetromino.mjs";
 import { Movement } from "../src/Movement.mjs";
 
-
 function distinctOrientations(shape) {
   const distinct = new Set();
   let goingRight = shape;

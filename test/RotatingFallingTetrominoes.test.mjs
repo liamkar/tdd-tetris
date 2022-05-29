@@ -33,7 +33,7 @@ describe("Rotating falling tetrominoes", () => {
 */
 
 
-  it("can be rotated to left", () => {
+  xit("can be rotated to left", () => {
     board.drop(Tetromino.T_SHAPE);
     //board.tick(Movement.Directions.Left);
     board.rotate(Movement.Directions.Left)
@@ -47,7 +47,7 @@ describe("Rotating falling tetrominoes", () => {
     );
   });
 
-  it("can be rotated to right", () => {
+  xit("can be rotated to right", () => {
     board.drop(Tetromino.T_SHAPE);
     //board.tick(Movement.Directions.Left);
     board.rotate(Movement.Directions.Right)
@@ -61,7 +61,40 @@ describe("Rotating falling tetrominoes", () => {
     );
   });
 
-  it("O shape rotation does not change visually", () => {
+  xit("rotating T-shape two times right points head down", () => {
+    board.drop(Tetromino.T_SHAPE);
+    //board.tick(Movement.Directions.Left);
+    board.rotate(Movement.Directions.Right)
+    board.rotate(Movement.Directions.Right)
+    expect(board.toString()).to.equalShape(
+      `...TTT....
+       ....T.....
+       ..........
+       ..........
+       ..........
+       ..........`
+    );
+  });
+
+  xit("rotating T-shape 4 times right places it in original position", () => {
+    board.drop(Tetromino.T_SHAPE);
+    //board.tick(Movement.Directions.Left);
+    board.rotate(Movement.Directions.Right)
+    board.rotate(Movement.Directions.Right)
+    board.rotate(Movement.Directions.Right)
+    board.rotate(Movement.Directions.Right)
+    expect(board.toString()).to.equalShape(
+      `....T.....
+       ...TTT....
+       ..........
+       ..........
+       ..........
+       ..........`
+    );
+  });
+
+
+  xit("O shape rotation does not change visually", () => {
     board.drop(Tetromino.O_SHAPE);
     //board.tick(Movement.Directions.Left);
     board.rotate(Movement.Directions.Right)
@@ -75,7 +108,7 @@ describe("Rotating falling tetrominoes", () => {
     );
   });
 
-  it("I shape drops right", () => {
+  xit("I shape drops right", () => {
     board.drop(Tetromino.I_SHAPE);
     //board.tick(Movement.Directions.Left);
     //board.rotate(Movement.Directions.Right)
@@ -100,7 +133,7 @@ describe("Rotating falling tetrominoes", () => {
     );
   });
 
-  it("I shape rotates right", () => {
+  xit("I shape rotates right", () => {
     board.drop(Tetromino.I_SHAPE);
     board.rotate(Movement.Directions.Right)
     //to be honest, i really dont quite get it which one of these is right
@@ -124,6 +157,95 @@ describe("Rotating falling tetrominoes", () => {
     );
     */
   });
+
+  xit("rotatating I shape two times places it in its original positions", () => {
+    board.drop(Tetromino.I_SHAPE);
+    board.rotate(Movement.Directions.Right)
+    board.rotate(Movement.Directions.Right)
+    expect(board.toString()).to.equalShape(
+      `...IIII...
+       ..........
+       ..........
+       ..........
+       ..........
+       ..........`
+    );
+  });
+
+
+  it("cannot be rotated when there is no room to rotate", () => {
+  
+    /*
+    board.drop(Tetromino.I_SHAPE);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    board.tick(Movement.Directions.Right);
+    //until here, the rotation shold work, but after adding next one rotation should
+    //not be possible anymore due to the right edge.
+    board.tick(Movement.Directions.Right);
+    board.rotate(Movement.Directions.Right)
+    //board.rotate(Movement.Directions.Right)
+    */
+
+    //well, what is this really?
+    //from here:
+    /*
+    `  ......IIII
+       ..........
+       ..........
+       ..........
+       ..........
+       ..........`
+    */
+   //we would end up here?
+    /*
+    `  ........I.
+       ........I.
+       ........I.
+       ........I.
+       ..........
+       ..........`
+       */
+    //and back to origianal
+
+    //so, is this valid? - honestly, I guess it might be.
+
+    //so, lets try to figure out a better example, what might not be valid?
+    //well, obviously by moving the piece to the left edge, when it is stading up
+    board.drop(Tetromino.I_SHAPE);
+    board.rotate(Movement.Directions.Right)
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+    board.tick(Movement.Directions.Left);
+    //until here, the rotation shold work, but after adding next one rotation should
+    //not be possible anymore due to the Left edge.
+    board.tick(Movement.Directions.Left);
+    //so this rotate should not happen
+    board.rotate(Movement.Directions.Right)
+    
+    //board.rotate(Movement.Directions.Right)
+
+    expect(board.toString()).to.equalShape(
+      `.I........
+       .I........
+       .I........
+       .I........
+       ..........
+       ..........`
+    );
+
+    /*
+    `  .....I....
+       .....I....
+       .....I....
+       .....I....
+       ..........
+       ..........`
+       */
+  });
+
+
+  
 
   /*
   it("can be moved right", () => {
